@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SpotifyiOS
 
 struct Constants {
     static let tokenApiUrl = "https://accounts.spotify.com/api/token"
@@ -16,6 +15,8 @@ struct Constants {
 
 final class AuthManger {
     static let shared = AuthManger()
+    
+    private var refreshingToken: Bool = false
     
     public var signInUrl: URL? {
         guard let client_id = Bundle.main.infoDictionary?["SPOTIFY_CLIENT_ID"] else {
@@ -70,12 +71,7 @@ final class AuthManger {
             URLQueryItem(name: "code", value: code),
             URLQueryItem(name: "redirect_uri", value: Constants.redirectURI),
         ]
-        
-//        handleAuthRequest(components: components) { success in
-//            print("success")
-//        }
-        
-        
+
         guard let url = URL(string: Constants.tokenApiUrl) else {
             return
         }
@@ -121,10 +117,43 @@ final class AuthManger {
         
     }
     
-    public func refreshTokenIfNeeded(completion: @escaping (Bool) -> Void) {
-        guard let refreshToken = self.refreshToken else {
+    
+    
+    
+    // Array of escaping closures the blocks, prevents redundent refreshes
+    private var onRefreshBlocks = [((String) -> Void)]()
+    
+    public func withValidToken(completion: @escaping (String) -> Void) {
+        guard !refreshingToken else {
+            onRefreshBlocks.append(completion)
             return
         }
+        
+        // If API call is made in the middle of another call
+        
+        if shouldRefreshToken {
+            // Refresh
+            refreshTokenIfNeeded { [weak self] success in
+                if let token = self?.accessToken {
+                    completion(token)
+                }
+            }
+        } else if let token = accessToken {
+            completion(token)
+        }
+    }
+    
+    public func refreshTokenIfNeeded(completion: @escaping (Bool) -> Void) {
+        guard !refreshingToken else { return }
+        
+        guard shouldRefreshToken else {
+            completion(true)
+            return
+        }
+        
+        guard let refreshToken = self.refreshToken else { return }
+        
+        refreshingToken = true
   
         var components = URLComponents()
         components.queryItems = [
@@ -161,13 +190,16 @@ final class AuthManger {
         request.setValue("Basic \(base64String)", forHTTPHeaderField: "Authorization")
         
         URLSession.shared.dataTask(with: request) { [weak self] data, _, error in
-                guard let data = data, error == nil else {
-                    completion(false)
-                    return
-                }
-            
+            self?.refreshingToken = false
+            guard let data = data, error == nil else {
+                completion(false)
+                return
+            }
+        
             do {
                 let result = try JSONDecoder().decode(AuthResponse.self, from: data)
+                self?.onRefreshBlocks.forEach { $0(result.access_token) }
+                self?.onRefreshBlocks.removeAll()
                 self?.cacheToken(result: result)
                 completion(true)
             } catch {
@@ -177,6 +209,8 @@ final class AuthManger {
         }.resume()
     }
 
+    
+    
     // Local caching
     private func cacheToken(result: AuthResponse) {
         UserDefaults.standard.setValue(result.access_token, forKey: "access_token")
