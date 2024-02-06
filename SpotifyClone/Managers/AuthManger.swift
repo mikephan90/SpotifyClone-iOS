@@ -9,8 +9,6 @@ import Foundation
 import SpotifyiOS
 
 struct Constants {
-    static let clientID = "2f0ab59701454163ab32d6ca31475a32"
-    static let clientSecret = "15cb40e653bf411cae929ed6b1c43280"
     static let tokenApiUrl = "https://accounts.spotify.com/api/token"
     static let redirectURI = "https://spotify.com"
     static let scopes = "user-read-private user-read-email playlist-modify-public playlist-read-private playlist-read-private user-follow-read user-library-modify user-library-read"
@@ -20,7 +18,10 @@ final class AuthManger {
     static let shared = AuthManger()
     
     public var signInUrl: URL? {
-        let client_id = Constants.clientID;
+        guard let client_id = Bundle.main.infoDictionary?["SPOTIFY_CLIENT_ID"] else {
+            return nil
+        }
+        
         let base = "https://accounts.spotify.com/authorize"
         let string = "\(base)?response_type=code&client_id=\(client_id)&scope=\(Constants.scopes)&redirect_uri=\(Constants.redirectURI)&show_dialog=TRUE"
         
@@ -62,11 +63,6 @@ final class AuthManger {
     public func exchangeCodeForToken(code: String, completion: @escaping (Bool) -> Void) {
         // Spotify documentation has good info on this
         
-        // Get token
-        guard let url = URL(string: Constants.tokenApiUrl) else {
-            return
-        }
-        
         // Creating API Request
         var components = URLComponents()
         components.queryItems = [
@@ -75,13 +71,30 @@ final class AuthManger {
             URLQueryItem(name: "redirect_uri", value: Constants.redirectURI),
         ]
         
+//        handleAuthRequest(components: components) { success in
+//            print("success")
+//        }
+        
+        
+        guard let url = URL(string: Constants.tokenApiUrl) else {
+            return
+        }
+              
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.httpBody = components.query?.data(using: .utf8)
         
         // Convert to base64
-        let basicToken = Constants.clientID + ":" + Constants.clientSecret
+        guard let client_id = Bundle.main.infoDictionary?["SPOTIFY_CLIENT_ID"] else {
+            return
+        }
+        
+        guard let client_secret = Bundle.main.infoDictionary?["SPOTIFY_CLIENT_SECRET"] else {
+            return
+        }
+        
+        let basicToken = "\(client_id):\(client_secret)"
         let data = basicToken.data(using: .utf8)
         guard let base64String = data?.base64EncodedString() else {
             print("Failure to get base64")
@@ -112,27 +125,33 @@ final class AuthManger {
         guard let refreshToken = self.refreshToken else {
             return
         }
-        
-        guard let url = URL(string: Constants.tokenApiUrl) else {
-            return
-        }
-        
-        
-        // TODO: MAKE THIS REQUEST REUSABLE
-        // Refresh Token API Request
+  
         var components = URLComponents()
         components.queryItems = [
             URLQueryItem(name: "grant_type", value: "refresh_token"),
             URLQueryItem(name: "refresh_token", value: refreshToken),
         ]
         
+        // TODO: This is copied from above. revisit
+        guard let url = URL(string: Constants.tokenApiUrl) else {
+            return
+        }
+              
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.httpBody = components.query?.data(using: .utf8)
         
         // Convert to base64
-        let basicToken = Constants.clientID + ":" + Constants.clientSecret
+        guard let client_id = Bundle.main.infoDictionary?["SPOTIFY_CLIENT_ID"] else {
+            return
+        }
+        
+        guard let client_secret = Bundle.main.infoDictionary?["SPOTIFY_CLIENT_SECRET"] else {
+            return
+        }
+        
+        let basicToken = "\(client_id):\(client_secret)"
         let data = basicToken.data(using: .utf8)
         guard let base64String = data?.base64EncodedString() else {
             print("Failure to get base64")
@@ -156,7 +175,6 @@ final class AuthManger {
                 completion(false)
             }
         }.resume()
-        
     }
 
     // Local caching

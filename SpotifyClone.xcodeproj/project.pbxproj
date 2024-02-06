@@ -60,8 +60,8 @@
 		B116ADD22B71E56200932AE1 /* Artist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Artist.swift; sourceTree = "<group>"; };
 		B116ADD42B71E56E00932AE1 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		B116ADD62B72835000932AE1 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		B116ADDB2B728A5800932AE1 /* SpotifyClone-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SpotifyClone-Bridging-Header.h"; sourceTree = "<group>"; };
 		B116ADDC2B72AB3E00932AE1 /* AuthResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthResponse.swift; sourceTree = "<group>"; };
+		B116ADDE2B72B56400932AE1 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +79,7 @@
 		B116AD8C2B71E25400932AE1 = {
 			isa = PBXGroup;
 			children = (
+				B116ADDE2B72B56400932AE1 /* Config.xcconfig */,
 				B116AD972B71E25400932AE1 /* SpotifyClone */,
 				B116AD962B71E25400932AE1 /* Products */,
 			);
@@ -102,7 +103,6 @@
 				B116ADAD2B71E26D00932AE1 /* View */,
 				B116ADAC2B71E26400932AE1 /* Controllers */,
 				B116ADA62B71E25600932AE1 /* Info.plist */,
-				B116ADDB2B728A5800932AE1 /* SpotifyClone-Bridging-Header.h */,
 			);
 			path = SpotifyClone;
 			sourceTree = "<group>";
@@ -306,6 +306,7 @@
 /* Begin XCBuildConfiguration section */
 		B116ADA72B71E25600932AE1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B116ADDE2B72B56400932AE1 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -369,6 +370,7 @@
 		};
 		B116ADA82B71E25600932AE1 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B116ADDE2B72B56400932AE1 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
