@@ -16,6 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let window = UIWindow(frame: UIScreen.main.bounds)
         if AuthManger.shared.isSignedIn {
+            AuthManger.shared.refreshTokenIfNeeded(completion: nil) // refreshes on launch
             window.rootViewController = TabBarViewController()
         } else {
             let navVC = UINavigationController(rootViewController: WelcomeViewController())
@@ -29,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window = window
         
         AuthManger.shared.refreshTokenIfNeeded { success in
-            print(success)
+//            print(success)
         }
         
         return true
