@@ -1,5 +1,5 @@
 //
-//  AlbumDetailsResponse.swift
+//  Album.swift
 //  SpotifyClone
 //
 //  Created by Mike Phan on 2/7/24.
@@ -7,16 +7,14 @@
 
 import Foundation
 
-struct AlbumDetailsResponse: Codable {
+struct Album: Codable {
     let album_type: String
-    let artists: [Artist]
+    let total_tracks: Int
     let available_markets: [String]
-    let external_urls: [String: String]
+    let external_urls: [String:String]
     let id: String
     let images: [APIImage]
-    let label: String
     let name: String
     let release_date: String
-    let total_tracks: Int
-    let tracks: TracksResponse
+    let artists: [Artist]
 }

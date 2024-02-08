@@ -48,6 +48,9 @@
 		B116AE092B7431E300932AE1 /* AlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B116AE082B7431E300932AE1 /* AlbumViewController.swift */; };
 		B116AE0B2B74358800932AE1 /* AlbumDetailsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B116AE0A2B74358800932AE1 /* AlbumDetailsResponse.swift */; };
 		B116AE0D2B74386000932AE1 /* Artist.swift in Sources */ = {isa = PBXBuildFile; fileRef = B116AE0C2B74386000932AE1 /* Artist.swift */; };
+		B116AE112B7438F700932AE1 /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = B116AE102B7438F700932AE1 /* Album.swift */; };
+		B116AE132B744B4A00932AE1 /* PlaylistDetailsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B116AE122B744B4A00932AE1 /* PlaylistDetailsResponse.swift */; };
+		B116AE152B744BDF00932AE1 /* TracksResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B116AE142B744BDF00932AE1 /* TracksResponse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -93,6 +96,9 @@
 		B116AE082B7431E300932AE1 /* AlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumViewController.swift; sourceTree = "<group>"; };
 		B116AE0A2B74358800932AE1 /* AlbumDetailsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumDetailsResponse.swift; sourceTree = "<group>"; };
 		B116AE0C2B74386000932AE1 /* Artist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Artist.swift; sourceTree = "<group>"; };
+		B116AE102B7438F700932AE1 /* Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
+		B116AE122B744B4A00932AE1 /* PlaylistDetailsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistDetailsResponse.swift; sourceTree = "<group>"; };
+		B116AE142B744BDF00932AE1 /* TracksResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksResponse.swift; sourceTree = "<group>"; };
 		CD0A4716A77DE157AD0B40DD /* Pods-SpotifyClone.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpotifyClone.debug.xcconfig"; path = "Target Support Files/Pods-SpotifyClone/Pods-SpotifyClone.debug.xcconfig"; sourceTree = "<group>"; };
 		D816359CAC2122838535E604 /* Pods_SpotifyClone.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SpotifyClone.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -194,6 +200,9 @@
 				B116ADF52B73E52800932AE1 /* RecommendationsResponse.swift */,
 				B116AE0A2B74358800932AE1 /* AlbumDetailsResponse.swift */,
 				B116AE0C2B74386000932AE1 /* Artist.swift */,
+				B116AE102B7438F700932AE1 /* Album.swift */,
+				B116AE122B744B4A00932AE1 /* PlaylistDetailsResponse.swift */,
+				B116AE142B744BDF00932AE1 /* TracksResponse.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -400,7 +409,9 @@
 				B116ADB32B71E45E00932AE1 /* TabBarViewController.swift in Sources */,
 				B116AE092B7431E300932AE1 /* AlbumViewController.swift in Sources */,
 				B116ADF92B73FBFB00932AE1 /* NewReleasesCollectionViewCell.swift in Sources */,
+				B116AE152B744BDF00932AE1 /* TracksResponse.swift in Sources */,
 				B116ADC92B71E52000932AE1 /* AuthManger.swift in Sources */,
+				B116AE132B744B4A00932AE1 /* PlaylistDetailsResponse.swift in Sources */,
 				B116ADDD2B72AB3E00932AE1 /* AuthResponse.swift in Sources */,
 				B116ADF62B73E52800932AE1 /* RecommendationsResponse.swift in Sources */,
 				B116ADED2B72F14C00932AE1 /* NewReleasesResponse.swift in Sources */,
@@ -411,6 +422,7 @@
 				B116AE0B2B74358800932AE1 /* AlbumDetailsResponse.swift in Sources */,
 				B116ADBB2B71E4AF00932AE1 /* AuthViewController.swift in Sources */,
 				B116AE072B742B1E00932AE1 /* RecommendedTrackCellViewModel.swift in Sources */,
+				B116AE112B7438F700932AE1 /* Album.swift in Sources */,
 				B116AD992B71E25400932AE1 /* AppDelegate.swift in Sources */,
 				B116ADD72B72835000932AE1 /* Extensions.swift in Sources */,
 				B116ADB72B71E49100932AE1 /* LibraryViewController.swift in Sources */,

@@ -22,7 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         } else {
             let navVC = UINavigationController(rootViewController: WelcomeViewController())
             navVC.navigationBar.prefersLargeTitles = true
-            navVC.viewControllers.first?.navigationItem.largeTitleDisplayMode = .always
+            navVC.viewControllers.first?.navigationItem.largeTitleDisplayMode = .automatic
             window.rootViewController = navVC
         }
         

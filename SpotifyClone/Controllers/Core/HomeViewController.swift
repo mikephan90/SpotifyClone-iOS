@@ -38,12 +38,11 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         
         title = "Browse"
-        
         view.backgroundColor = .systemBackground
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "gear"), style: .done, target: self, action: #selector(didTapSettings))
         
-        view.addSubview(spinner)
         configureCollectionView()
+        view.addSubview(spinner)
         fetchData()
     }
     
@@ -182,19 +181,10 @@ class HomeViewController: UIViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
     
-//    private func configureModels(newAlbums: [Album], playlists: [Playlist], tracks: [AudioTrack]) {
-    private func configureModels(newAlbums: [Album], playlists: [Playlist]) {
+    private func configureModels(newAlbums: [Album], playlists: [Playlist], tracks: [AudioTrack]) {
         self.newAlbums = newAlbums
         self.playlists = playlists
-//        self.tracks = tracks
-        
-//        self.tracks = tracks.compactMap {
-//            return RecommendedTrackCellViewModel(
-//                name: $0.name,
-//                artistName: $0.artists.first?.name ?? "",
-//                artworkUrl: URL(string: $0.album.images.first?.url ?? "")
-//            )
-//        }
+        self.tracks = tracks
         
         // Configure Models
         sections.append(.newReleases(viewModels: newAlbums.compactMap {
@@ -212,13 +202,13 @@ class HomeViewController: UIViewController {
                 creatorName: $0.owner.display_name
             )
         }))
-//        sections.append(.recommendedTracks(viewModels: tracks.compactMap {
-//            return RecommendedTrackCellViewModel(
-//                name: $0.name,
-//                artistName: $0.artists.first?.name ?? "",
-//                artworkUrl: URL(string: $0.album.images.first?.url ?? "")
-//            )
-//        }))
+        sections.append(.recommendedTracks(viewModels: tracks.compactMap {
+            return RecommendedTrackCellViewModel(
+                name: $0.name,
+                artistName: $0.artists.first?.name ?? "",
+                artworkUrl: URL(string: $0.album?.images.first?.url ?? "")
+            )
+        }))
 
         collectionView.reloadData()
     }
@@ -227,7 +217,7 @@ class HomeViewController: UIViewController {
         let group = DispatchGroup()
         group.enter()
         group.enter()
-//        group.enter()
+        group.enter()
         
         var newReleases: NewReleasesResponse?
         var featuredPlaylist: FeaturedPlaylistResponse?
@@ -254,7 +244,7 @@ class HomeViewController: UIViewController {
             }
         }
         // Recommended tracks
-        APICaller.shared.getRecommendedGenre { result in
+        APICaller.shared.getRecommendedGenres { result in
             switch result {
             case .success(let model):
                 let genres = model.genres
@@ -264,7 +254,6 @@ class HomeViewController: UIViewController {
                         seeds.insert(random)
                     }
                 }
-
                 APICaller.shared.getRecommendations(genres: seeds) { recommendedResult in
                     defer {
                         group.leave()
@@ -279,20 +268,13 @@ class HomeViewController: UIViewController {
         }
         
         // When group queue is done execute
-//        group.notify(queue: .main) {
-//            guard let newAlbums = newReleases?.albums.items,
-//                  let playlists = featuredPlaylist?.playlists.items,
-//                  let tracks = recommendations?.tracks else {
-//                return
-//            }
-//            self.configureModels(newAlbums: newAlbums, playlists: playlists, tracks: tracks)
-//        }
         group.notify(queue: .main) {
             guard let newAlbums = newReleases?.albums.items,
-                  let playlists = featuredPlaylist?.playlists.items else {
+                  let playlists = featuredPlaylist?.playlists.items,
+                  let tracks = recommendations?.tracks else {
                 return
             }
-            self.configureModels(newAlbums: newAlbums, playlists: playlists)
+            self.configureModels(newAlbums: newAlbums, playlists: playlists, tracks: tracks)
         }
     }
 }
