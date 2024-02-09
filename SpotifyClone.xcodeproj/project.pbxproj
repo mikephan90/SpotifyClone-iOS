@@ -67,6 +67,7 @@
 		B186CCE22B75D64E002FCF6D /* SearchSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B186CCE12B75D64E002FCF6D /* SearchSection.swift */; };
 		B186CCE42B75D8CB002FCF6D /* SearchResultSubtitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B186CCE32B75D8CB002FCF6D /* SearchResultSubtitleTableViewCell.swift */; };
 		B186CCE62B75D989002FCF6D /* SearchResultSubtitleTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B186CCE52B75D989002FCF6D /* SearchResultSubtitleTableViewModel.swift */; };
+		B186CCE92B75DCE5002FCF6D /* PlaybackPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B186CCE82B75DCE5002FCF6D /* PlaybackPresenter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -131,6 +132,7 @@
 		B186CCE12B75D64E002FCF6D /* SearchSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSection.swift; sourceTree = "<group>"; };
 		B186CCE32B75D8CB002FCF6D /* SearchResultSubtitleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultSubtitleTableViewCell.swift; sourceTree = "<group>"; };
 		B186CCE52B75D989002FCF6D /* SearchResultSubtitleTableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultSubtitleTableViewModel.swift; sourceTree = "<group>"; };
+		B186CCE82B75DCE5002FCF6D /* PlaybackPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackPresenter.swift; sourceTree = "<group>"; };
 		CD0A4716A77DE157AD0B40DD /* Pods-SpotifyClone.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpotifyClone.debug.xcconfig"; path = "Target Support Files/Pods-SpotifyClone/Pods-SpotifyClone.debug.xcconfig"; sourceTree = "<group>"; };
 		D816359CAC2122838535E604 /* Pods_SpotifyClone.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SpotifyClone.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -188,6 +190,7 @@
 		B116AD972B71E25400932AE1 /* SpotifyClone */ = {
 			isa = PBXGroup;
 			children = (
+				B186CCE72B75DCD3002FCF6D /* Presenter */,
 				B116ADB12B71E28700932AE1 /* Resources */,
 				B116ADB02B71E28300932AE1 /* Managers */,
 				B116ADAF2B71E27D00932AE1 /* ViewModels */,
@@ -330,6 +333,14 @@
 			path = SearchResultCells;
 			sourceTree = "<group>";
 		};
+		B186CCE72B75DCD3002FCF6D /* Presenter */ = {
+			isa = PBXGroup;
+			children = (
+				B186CCE82B75DCE5002FCF6D /* PlaybackPresenter.swift */,
+			);
+			path = Presenter;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -452,6 +463,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B116AE012B73FD0600932AE1 /* NewReleasesCellViewModel.swift in Sources */,
+				B186CCE92B75DCE5002FCF6D /* PlaybackPresenter.swift in Sources */,
 				B116ADB52B71E48000932AE1 /* SearchViewController.swift in Sources */,
 				B116AE1D2B7555C700932AE1 /* AlbumTrackCollectionViewCell.swift in Sources */,
 				B116AE172B748C3200932AE1 /* PlaylistHeaderCollectionReusableView.swift in Sources */,

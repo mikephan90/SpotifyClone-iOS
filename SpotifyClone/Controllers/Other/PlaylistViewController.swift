@@ -9,9 +9,13 @@ import UIKit
 
 class PlaylistViewController: UIViewController {
     
+    // MARK: - Properties
+    
     private let playlist: Playlist
     
     private var viewModels = [RecommendedTrackCellViewModel]()
+    
+    private var tracks = [AudioTrack]()
     
     private let collectionView = UICollectionView(
         frame: .zero,
@@ -47,6 +51,8 @@ class PlaylistViewController: UIViewController {
         })
     )
     
+    // MARK: - Init
+    
     init(playlist: Playlist) {
         self.playlist = playlist
         super.init(nibName: nil, bundle: nil)
@@ -55,6 +61,8 @@ class PlaylistViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,6 +89,7 @@ class PlaylistViewController: UIViewController {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let model):
+                    self?.tracks = model.tracks.items.compactMap{ $0.track }
                     self?.viewModels = model.tracks.items.compactMap{
                         RecommendedTrackCellViewModel(
                             name: $0.track.name,
@@ -98,6 +107,13 @@ class PlaylistViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(didTapShare))
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        collectionView.frame = view.bounds
+    }
+    
+    // MARK: - Functions
+    
     @objc private func didTapShare() {
         guard let url = URL(string: playlist.external_urls["spotify"] ?? "") else {
             return
@@ -107,11 +123,6 @@ class PlaylistViewController: UIViewController {
         let vc = UIActivityViewController(activityItems: [url], applicationActivities: [])
         vc.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
         present(vc, animated: true)
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        collectionView.frame = view.bounds
     }
 }
 
@@ -160,12 +171,13 @@ extension PlaylistViewController: UICollectionViewDelegate, UICollectionViewData
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         
-        // Play song
+        let track = tracks[indexPath.row]
+        PlaybackPresenter.startPlayback(from: self, track: track)
     }
 }
 
 extension PlaylistViewController: PlaylistHeaderCollectionReusableViewDelegate {
     func playlistHeaderCollectionReusableViewDidTapPlayAll(_ header: PlaylistHeaderCollectionReusableView) {
-        print("Play All")
+        PlaybackPresenter.startPlayback(from: self, tracks: tracks)
     }
 }

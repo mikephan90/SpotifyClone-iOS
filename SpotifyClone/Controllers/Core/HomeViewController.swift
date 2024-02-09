@@ -240,7 +240,7 @@ class HomeViewController: UIViewController {
         let group = DispatchGroup()
         group.enter()
         group.enter()
-//        group.enter()
+        group.enter()
         
         var newReleases: NewReleasesResponse?
         var featuredPlaylist: FeaturedPlaylistResponse?
@@ -267,48 +267,39 @@ class HomeViewController: UIViewController {
             }
         }
         // Recommended tracks
-//        APICaller.shared.getRecommendedGenres { result in
-//            switch result {
-//            case .success(let model):
-//                let genres = model.genres
-//                var seeds = Set<String>()
-//                while seeds.count < 5 {
-//                    if let random = genres.randomElement() {
-//                        seeds.insert(random)
-//                    }
-//                }
-//                APICaller.shared.getRecommendations(genres: seeds) { recommendedResult in
-//                    defer {
-//                        group.leave()
-//                    }
-//                    switch recommendedResult {
-//                    case .success(let model): recommendations = model
-//                    case .failure(let error): print(error.localizedDescription)
-//                    }
-//                }
-//            case .failure(let error): print(error.localizedDescription)
-//            }
-//        }
-//        
-        // When group queue is done execute
-//        group.notify(queue: .main) {
-//            guard let newAlbums = newReleases?.albums.items,
-//                  let playlists = featuredPlaylist?.playlists.items,
-//                  let tracks = recommendations?.tracks else {
-//                
-//                return
-//            }
-//            self.configureModels(newAlbums: newAlbums, playlists: playlists, tracks: tracks)
-//        }
-                group.notify(queue: .main) {
-                    guard let newAlbums = newReleases?.albums.items,
-                          let playlists = featuredPlaylist?.playlists.items else {
-//                          let tracks = recommendations?.tracks else {
-        
-                        return
+        APICaller.shared.getRecommendedGenres { result in
+            switch result {
+            case .success(let model):
+                let genres = model.genres
+                var seeds = Set<String>()
+                while seeds.count < 5 {
+                    if let random = genres.randomElement() {
+                        seeds.insert(random)
                     }
-                    self.configureModels(newAlbums: newAlbums, playlists: playlists, tracks: [])
                 }
+                APICaller.shared.getRecommendations(genres: seeds) { recommendedResult in
+                    defer {
+                        group.leave()
+                    }
+                    switch recommendedResult {
+                    case .success(let model): recommendations = model
+                    case .failure(let error): print(error.localizedDescription)
+                    }
+                }
+            case .failure(let error): print(error.localizedDescription)
+            }
+        }
+        
+        // When group queue is done execute
+        group.notify(queue: .main) {
+            guard let newAlbums = newReleases?.albums.items,
+                  let playlists = featuredPlaylist?.playlists.items,
+                  let tracks = recommendations?.tracks else {
+                
+                return
+            }
+            self.configureModels(newAlbums: newAlbums, playlists: playlists, tracks: tracks)
+        }
     }
 }
 
@@ -364,7 +355,9 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             vc.title = album.name
             vc.navigationItem.largeTitleDisplayMode = .never
             navigationController?.pushViewController(vc, animated: true)
-        case .recommendedTracks: break
+        case .recommendedTracks:
+            let track = tracks[indexPath.row]
+            PlaybackPresenter.startPlayback(from: self, track: track)
         }
     }
     

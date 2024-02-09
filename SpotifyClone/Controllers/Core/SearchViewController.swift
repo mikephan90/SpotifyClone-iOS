@@ -134,19 +134,19 @@ extension SearchViewController: UISearchBarDelegate, SearchResultViewControllerD
     
     func didTapResult(_ result: SearchResult) {
         switch result {
-        case .track(let model):
+        case .artist(let model):
             guard let url = URL(string: model.external_urls["spotify"] ?? "") else {
                 return
             }
             
             let vc = SFSafariViewController(url: url)
             present(vc, animated: true)
-        case .artist(let model):
-            break
         case .album(let model):
             let vc = AlbumViewController(album: model)
             vc.navigationItem.largeTitleDisplayMode = .never
             navigationController?.pushViewController(vc, animated: true)
+        case .track(let track):
+            PlaybackPresenter.startPlayback(from: self, track: track)
         case .playlist(let model):
             let vc = PlaylistViewController(playlist: model)
             vc.navigationItem.largeTitleDisplayMode = .never
