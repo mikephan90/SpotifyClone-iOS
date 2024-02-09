@@ -73,10 +73,31 @@ final class APICaller {
     
     // MARK: - Search
     
-    public func search(with query: String, completion: @escaping ResultCallback<String>) {
-        let type = "album,artist,playlist,track"
-        let url = URL(string: APIConstants.baseApiUrl + "/search?limit=10&type=\(type)&q\(query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")")
-        sessionTask(from: url, completion: completion)
+    public func search(with query: String, completion: @escaping (Result<[SearchResult], Error>) -> Void) {
+        let limit = 20
+        let url = URL(string: APIConstants.baseApiUrl + "/search?limit=\(limit)&type=album,artist,playlist,track&q=\(query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")")
+        createRequest(with: url, type: .GET) { request in
+            URLSession.shared.dataTask(with: request) { data, _, error in
+                guard let data = data, error == nil else {
+                    completion(.failure(APIError.failedToGetData))
+                    return
+                }
+                
+                do {
+                    let result = try JSONDecoder().decode(SearchResultResponse.self, from: data)
+                    var searchResults: [SearchResult] = []
+                    searchResults.append(contentsOf: result.tracks.items.compactMap({ .track(model: $0) }))
+                    searchResults.append(contentsOf: result.albums.items.compactMap({ .album(model: $0) }))
+                    searchResults.append(contentsOf: result.playlists.items.compactMap({ .playlist(model: $0) }))
+                    searchResults.append(contentsOf: result.artists.items.compactMap({ .artist(model: $0) }))
+                    
+                    completion(.success(searchResults))
+                } catch {
+                    print(error.localizedDescription)
+                    completion(.failure(error))
+                }
+            }.resume()
+        }
     }
     
     // MARK: - Albums
@@ -149,7 +170,7 @@ final class APICaller {
                     completion(.failure(APIError.failedToGetData))
                     return
                 }
-                
+
                 do {
                     let result = try JSONDecoder().decode(T.self, from: data)
                     completion(.success(result))
@@ -161,11 +182,11 @@ final class APICaller {
     }
 }
 
-
+//
 //extension APICaller {
-//    private func decodeDebugger(data: Data) {
+//    private func decodeDebugger<T: Decodable>(data: Data) {
 //        do {
-//            let result = try JSONDecoder().decode(PlaylistDetailsResponse.self, from: data)
+//            let result = try JSONDecoder().decode(T.self, from: data)
 //            print(result)
 //        } catch DecodingError.keyNotFound(let key, _) {
 //            print("Key '\(key.stringValue)' not found.")
@@ -183,6 +204,6 @@ final class APICaller {
 //        }
 //    }
 //}
-
-
-
+//
+//
+//

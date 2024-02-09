@@ -5,6 +5,7 @@
 //  Created by Mike Phan on 2/5/24.
 //
 
+import SafariServices
 import UIKit
 
 class SearchViewController: UIViewController, UISearchResultsUpdating {
@@ -125,7 +126,33 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
 }
 
-extension SearchViewController: UISearchBarDelegate {
+extension SearchViewController: UISearchBarDelegate, SearchResultViewControllerDelegate {
+    func showResult(_ controller: UIViewController) {
+        controller.navigationItem.largeTitleDisplayMode = .never
+        navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    func didTapResult(_ result: SearchResult) {
+        switch result {
+        case .track(let model):
+            guard let url = URL(string: model.external_urls["spotify"] ?? "") else {
+                return
+            }
+            
+            let vc = SFSafariViewController(url: url)
+            present(vc, animated: true)
+        case .artist(let model):
+            break
+        case .album(let model):
+            let vc = AlbumViewController(album: model)
+            vc.navigationItem.largeTitleDisplayMode = .never
+            navigationController?.pushViewController(vc, animated: true)
+        case .playlist(let model):
+            let vc = PlaylistViewController(playlist: model)
+            vc.navigationItem.largeTitleDisplayMode = .never
+            navigationController?.pushViewController(vc, animated: true)
+        }
+    }
     
     // Calls API on explicit SEARCH
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -135,11 +162,13 @@ extension SearchViewController: UISearchBarDelegate {
             return
         }
         
+        resultsController.delegate = self
+        
         APICaller.shared.search(with: query) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let results):
-                    break
+                    resultsController.update(with: results)
                 case .failure(let error):
                     print(error.localizedDescription)
                 }
