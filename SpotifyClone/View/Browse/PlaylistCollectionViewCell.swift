@@ -1,5 +1,5 @@
 //
-//  FeaturedPlaylistCollectionViewCell.swift
+//  PlaylistCollectionViewCell.swift
 //  SpotifyClone
 //
 //  Created by Mike Phan on 2/7/24.
@@ -7,8 +7,8 @@
 
 import UIKit
 
-class FeaturedPlaylistCollectionViewCell: UICollectionViewCell {
-    static let identifier = "FeaturedPlaylistCollectionViewCell"
+class PlaylistCollectionViewCell: UICollectionViewCell {
+    static let identifier = "PlaylistCollectionViewCell"
     
     private let playlistCoverImageView: UIImageView = {
         let imageView = UIImageView()
@@ -79,7 +79,7 @@ class FeaturedPlaylistCollectionViewCell: UICollectionViewCell {
     }
     
     // Configure Cell with viewModel info
-    func configure(with viewModel: FeaturedPlaylistCellViewModel) {
+    func configure(with viewModel: PlaylistCellViewModel) {
         playlistNameLabel.text = viewModel.name
         creatorNameLabel.text = viewModel.creatorName
         playlistCoverImageView.sd_setImage(with: viewModel.artworkUrl, completed: nil)

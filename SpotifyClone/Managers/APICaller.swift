@@ -28,6 +28,57 @@ final class APICaller {
     
     private init() {}
     
+    // MARK: - Categories
+    
+    public func getCategories(completion: @escaping (Result<[Category], Error>) -> Void) {
+        let url = URL(string: APIConstants.baseApiUrl + "/browse/categories?limit=50")
+        createRequest(with: url, type: .GET) { request in
+            URLSession.shared.dataTask(with: request) { data, _, error in
+                guard let data = data, error == nil else {
+                    completion(.failure(APIError.failedToGetData))
+                    return
+                }
+                
+                do {
+                    let result = try JSONDecoder().decode(AllCategoriesResponse.self, from: data)
+                    completion(.success(result.categories.items))
+                } catch {
+                    print(error.localizedDescription)
+                    completion(.failure(error))
+                }
+            }.resume()
+        }
+    }
+    
+    public func getCategoryPlaylist(category: Category, completion: @escaping (Result<[Playlist], Error>) -> Void) {
+        let url = URL(string: APIConstants.baseApiUrl + "/browse/categories/\(category.id)/playlists?limit=50")
+        createRequest(with: url, type: .GET) { request in
+            URLSession.shared.dataTask(with: request) { data, _, error in
+                guard let data = data, error == nil else {
+                    completion(.failure(APIError.failedToGetData))
+                    return
+                }
+                
+                do {
+                    let result = try JSONDecoder().decode(CategoryPlaylistResponse.self, from: data)
+                    let playlists = result.playlists.items
+                    completion(.success(playlists))
+                } catch {
+                    print(error.localizedDescription)
+                    completion(.failure(error))
+                }
+            }.resume()
+        }
+    }
+    
+    // MARK: - Search
+    
+    public func search(with query: String, completion: @escaping ResultCallback<String>) {
+        let type = "album,artist,playlist,track"
+        let url = URL(string: APIConstants.baseApiUrl + "/search?limit=10&type=\(type)&q\(query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")")
+        sessionTask(from: url, completion: completion)
+    }
+    
     // MARK: - Albums
     
     public func getAlbumDetails(for album: Album, completion: @escaping ResultCallback<AlbumDetailsResponse>) {
@@ -38,7 +89,7 @@ final class APICaller {
     // MARK: - Playlists
     
     public func getPlaylistDetails(for playlist: Playlist, completion: @escaping ResultCallback<PlaylistDetailsResponse>) {
-       let url = URL(string: APIConstants.baseApiUrl + "/playlists/" + playlist.id)
+        let url = URL(string: APIConstants.baseApiUrl + "/playlists/" + playlist.id)
         sessionTask(from: url, completion: completion)
     }
     
@@ -48,6 +99,8 @@ final class APICaller {
         let url = URL(string: APIConstants.baseApiUrl + "/me")
         sessionTask(from: url, completion: completion)
     }
+    
+    // MARK: - Tracks
     
     public func getNewReleases(completion: @escaping ResultCallback<NewReleasesResponse>){
         let url = URL(string: APIConstants.baseApiUrl + "/browse/new-releases?limit=50")
@@ -69,6 +122,8 @@ final class APICaller {
         let url = URL(string: APIConstants.baseApiUrl + "/recommendations/available-genre-seeds")
         sessionTask(from: url, completion: completion)
     }
+    
+    // MARK: - API Helpers
     
     private func createRequest(with url: URL?, type: HTTPMethod, completion: @escaping (URLRequest) -> Void) {
         AuthManger.shared.withValidToken { token in
@@ -107,24 +162,27 @@ final class APICaller {
 }
 
 
-extension APICaller {
-    private func decodeDebugger(data: Data) {
-        do {
-            let result = try JSONDecoder().decode(PlaylistDetailsResponse.self, from: data)
-            print(result)
-        } catch DecodingError.keyNotFound(let key, _) {
-            print("Key '\(key.stringValue)' not found.")
-        } catch let error {
-            print("An error occurred: \(error)")
-        }
-    }
-    
-    private func printJson(data: Data) {
-        do {
-            let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
-            print(json)
-        } catch let error {
-            print("ERROR: \(error)")
-        }
-    }
-}
+//extension APICaller {
+//    private func decodeDebugger(data: Data) {
+//        do {
+//            let result = try JSONDecoder().decode(PlaylistDetailsResponse.self, from: data)
+//            print(result)
+//        } catch DecodingError.keyNotFound(let key, _) {
+//            print("Key '\(key.stringValue)' not found.")
+//        } catch let error {
+//            print("An error occurred: \(error)")
+//        }
+//    }
+//
+//    private func printJson(data: Data) {
+//        do {
+//            let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+//            print(json)
+//        } catch let error {
+//            print("ERROR: \(error)")
+//        }
+//    }
+//}
+
+
+
