@@ -15,5 +15,3 @@ struct Playlist: Codable {
     let name: String
     let owner: User
 }
-
-
