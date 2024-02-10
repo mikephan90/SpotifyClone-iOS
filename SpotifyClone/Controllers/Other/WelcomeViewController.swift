@@ -18,6 +18,38 @@ class WelcomeViewController: UIViewController {
         
         return button
     }()
+    
+    private let bgImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.image = UIImage(named: "albums")
+        return imageView
+    }()
+    
+    private let overlayView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .black
+        view.alpha = 0.9
+        return view
+    }()
+    
+    private let logoImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.image = UIImage(named: "spotify-logo")
+        return imageView
+    }()
+    
+    private let label: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.textColor = .white
+        label.textAlignment = .center
+        label.text = "Listen to millions of songs\non the go."
+        label.font = .systemFont(ofSize: 32, weight: .bold)
+        
+        return label
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +57,10 @@ class WelcomeViewController: UIViewController {
         title = "Spotify"
         view.backgroundColor = .systemGreen
         signInButton.addTarget(self, action: #selector(didTapSignIn), for: .touchUpInside)
+        view.addSubview(bgImageView)
+        view.addSubview(overlayView)
+        view.addSubview(logoImageView)
+        view.addSubview(label)
         view.addSubview(signInButton)
     }
     
@@ -38,6 +74,11 @@ class WelcomeViewController: UIViewController {
             width: view.width - 40,
             height: 50
         )
+        overlayView.frame = view.bounds
+        bgImageView.frame = view.bounds
+        
+        logoImageView.frame = CGRect(x: (view.width-120)/2, y: (view.height-300)/2, width: 120, height: 120)
+        label.frame = CGRect(x: 30, y: logoImageView.bottom+30, width: view.width-60, height: 150)
     }
     
     @objc func didTapSignIn() {

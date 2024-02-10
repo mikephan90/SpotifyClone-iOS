@@ -108,7 +108,4 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         
         return cell
     }
-    
-    
-    
 }

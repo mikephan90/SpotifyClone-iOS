@@ -112,8 +112,6 @@ class AlbumViewController: UIViewController {
     
         
         navigationItem.rightBarButtonItems = [saveAlbumButton, shareAlbumButton]
-        
-        
     }
     
     // MARK: - Functions
@@ -146,8 +144,7 @@ class AlbumViewController: UIViewController {
             guard let sself = self else { return }
             APICaller.shared.saveAlbum(album: sself.album) { success in
                 // Add alert to confirm saved
-                
-                // This will notify center to see to update
+                HapticsManager.shared.vibrate(for: .success)
                 if success {
                     NotificationCenter.default.post(name: .albumSavedNotification, object: nil)
                 }

@@ -209,8 +209,6 @@ final class AuthManger {
         }.resume()
     }
 
-    
-    
     // Local caching
     private func cacheToken(result: AuthResponse) {
         UserDefaults.standard.setValue(result.access_token, forKey: "access_token")
@@ -218,5 +216,13 @@ final class AuthManger {
             UserDefaults.standard.setValue(refresh_token, forKey: "refresh_token")
         }
         UserDefaults.standard.setValue(Date().addingTimeInterval(TimeInterval(result.expires_in)), forKey: "expirationDate")
+    }
+    
+    public func signOut(completion: (Bool) -> Void) {
+        UserDefaults.standard.setValue(nil, forKey: "access_token")
+        UserDefaults.standard.setValue(nil, forKey: "refresh_token")
+        UserDefaults.standard.setValue(nil, forKey: "expirationDate")
+        
+        completion(true)
     }
 }
