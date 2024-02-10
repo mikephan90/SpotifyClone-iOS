@@ -10,6 +10,11 @@ import WebKit
 
 class AuthViewController: UIViewController {
     
+    // MARK: - Properties
+    
+    public var completionHandler: ((Bool) -> Void)?
+    private let viewModel = AuthViewModel()
+    
     // Create a webview for authentication
     private let webView: WKWebView = {
         
@@ -24,9 +29,8 @@ class AuthViewController: UIViewController {
         
         return webView
     }()
-    
-    // Communicates from webView to app
-    public var completionHandler: ((Bool) -> Void)?
+
+    // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,13 +41,10 @@ class AuthViewController: UIViewController {
         
         webView.navigationDelegate = self
         
-        guard let url = AuthManger.shared.signInUrl else {
-            return
+        if let url = viewModel.signInUrl() {
+            // Open into webview
+            webView.load(URLRequest(url: url))
         }
-        
-        // Open into webview
-        webView.load(URLRequest(url: url))
-    
     }
     
     override func viewDidLayoutSubviews() {
@@ -52,30 +53,26 @@ class AuthViewController: UIViewController {
         // Make entire page the webview
         webView.frame = view.bounds
     }
-    
+}
+
+extension AuthViewController: WKNavigationDelegate {
     // Because we added observants to the navigation delegate for webview
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        guard let url = webView.url else {
-            return
-        }
+      
         
-        // if url has parameter for code, take it out
-        // Exchnage code for access token
-        guard let code = URLComponents(string: url.absoluteString)?.queryItems?.first(where: { $0.name == "code" })?.value else {
+        guard let url = webView.url,
+              let code = URLComponents(string: url.absoluteString)?.queryItems?.first(where: { 
+                  $0.name == "code"
+              })?.value else {
             return
         }
         webView.isHidden = true
 
         AuthManger.shared.exchangeCodeForToken(code: code) { [weak self] success in
-            // Dispatch on to main thread
             DispatchQueue.main.async {
                 self?.navigationController?.popToRootViewController(animated: true)
                 self?.completionHandler?(success)
             }
         }
     }
-}
-
-extension AuthViewController: WKNavigationDelegate {
-    
 }
