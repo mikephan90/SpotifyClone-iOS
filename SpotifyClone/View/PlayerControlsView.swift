@@ -12,11 +12,21 @@ protocol PlayerControlViewDelegate: AnyObject {
     func playerControllerViewDidTapPlayPause(_ playerControlView: PlayerControlsView)
     func playerControllerViewDidTapNextButton(_ playerControlView: PlayerControlsView)
     func playerControllerViewDidTapBackButton(_ playerControlView: PlayerControlsView)
+    func playerControllerView(_ playerControlsView: PlayerControlsView, didSlideSlider value: Float)
+}
+
+///temp view model
+
+struct PlayerControlsViewViewModel {
+    let title: String?
+    let subtitle: String?
 }
 
 final class PlayerControlsView: UIView {
     
     // MARK: - Properties
+    
+    private var isPlaying = true
     
     weak var delegate: PlayerControlViewDelegate?
     
@@ -103,6 +113,8 @@ final class PlayerControlsView: UIView {
         addSubview(nextButton)
         addSubview(playPauseButton)
         
+        
+        volumeSlider.addTarget(self, action: #selector(didSlideSlider), for: .valueChanged)
         backButton.addTarget(self, action: #selector(didTapBack), for: .touchUpInside)
         nextButton.addTarget(self, action: #selector(didTapNext), for: .touchUpInside)
         playPauseButton.addTarget(self, action: #selector(didTapPlayPause), for: .touchUpInside)
@@ -137,6 +149,16 @@ final class PlayerControlsView: UIView {
     
     // MARK: - Functions
     
+    func configure(with viewModel: PlayerControlsViewViewModel) {
+        nameLabel.text = viewModel.title
+        subtitleLabel.text = viewModel.subtitle
+    }
+    
+    @objc private func didSlideSlider(_ slider: UISlider) {
+        let value = slider.value
+        delegate?.playerControllerView(self, didSlideSlider: value)
+    }
+    
     @objc private func didTapBack() {
         delegate?.playerControllerViewDidTapBackButton(self)
     }
@@ -146,6 +168,19 @@ final class PlayerControlsView: UIView {
     }
     
     @objc private func didTapPlayPause() {
+        self.isPlaying = !isPlaying
         delegate?.playerControllerViewDidTapPlayPause(self)
+        
+        let play = UIImage(
+            systemName: "play.fill",
+            withConfiguration: UIImage.SymbolConfiguration(pointSize: 40, weight: .regular)
+        )
+        let pause = UIImage(
+            systemName: "pause",
+            withConfiguration: UIImage.SymbolConfiguration(pointSize: 40, weight: .regular)
+        )
+            
+        // Update Icon
+        playPauseButton.setImage(isPlaying ? pause : play, for: .normal)
     }
 }

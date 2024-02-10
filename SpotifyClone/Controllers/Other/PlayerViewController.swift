@@ -6,15 +6,26 @@
 //
 
 import UIKit
+import SDWebImage
+
+protocol PlayerViewControllerDelegate: AnyObject {
+    func didTapPlayPause()
+    func didTapNext()
+    func didTapBack()
+    func didSlideSlider(_ value: Float)
+}
 
 class PlayerViewController: UIViewController {
+    
+    weak var dataSource: PlayerDataSource?
+    
+    weak var delegate: PlayerViewControllerDelegate?
 
     // MARK: - Properties
     
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
-        imageView.backgroundColor = .systemBlue
         return imageView
     }()
     
@@ -32,6 +43,7 @@ class PlayerViewController: UIViewController {
         controlsView.delegate = self
         
         configureBarButtons()
+        configure()
     }
     
     override func viewDidLayoutSubviews() {
@@ -47,6 +59,19 @@ class PlayerViewController: UIViewController {
     
     // MARK: - Functions
     
+    private func configure() {
+        // TODO: BUG Here, image doesn't not display on when refreshing to back to first
+        imageView.sd_setImage(with: dataSource?.imageUrl, completed: nil)
+        controlsView.configure(with: PlayerControlsViewViewModel(
+            title: dataSource?.songName,
+            subtitle: dataSource?.subtitle)
+        )
+    }
+    
+    func refreshUI() {
+        configure()
+    }
+    
     private func configureBarButtons() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(didTapClose))
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(didTapAction))
@@ -57,22 +82,24 @@ class PlayerViewController: UIViewController {
     }
     
     @objc private func didTapAction() {
-        
+       
     }
 }
 
 extension PlayerViewController: PlayerControlViewDelegate {
+    func playerControllerView(_ playerControlsView: PlayerControlsView, didSlideSlider value: Float) {
+        delegate?.didSlideSlider(value)
+    }
+    
     func playerControllerViewDidTapPlayPause(_ playerControlView: PlayerControlsView) {
-        <#code#>
+        delegate?.didTapPlayPause()
     }
     
     func playerControllerViewDidTapNextButton(_ playerControlView: PlayerControlsView) {
-        <#code#>
+        delegate?.didTapNext()
     }
     
     func playerControllerViewDidTapBackButton(_ playerControlView: PlayerControlsView) {
-        <#code#>
+        delegate?.didTapBack()
     }
-    
-    
 }

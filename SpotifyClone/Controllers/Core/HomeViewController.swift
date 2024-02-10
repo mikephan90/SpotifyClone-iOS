@@ -7,21 +7,25 @@
 
 import UIKit
 
-enum BrowseSectionType {
-    case newReleases(viewModels: [NewReleasesCellViewModel])
-    case featuredPlaylists(viewModels: [PlaylistCellViewModel])
-    case recommendedTracks(viewModels: [RecommendedTrackCellViewModel])
+class HomeViewController: UIViewController {
     
-    var title: String {
-        switch self {
-        case .newReleases: return "New Release Albums"
-        case .featuredPlaylists: return "Featured Playlists"
-        case .recommendedTracks: return "Recommended"
+    // MARK: - Enum
+    
+    enum BrowseSectionType {
+        case newReleases(viewModels: [NewReleasesCellViewModel])
+        case featuredPlaylists(viewModels: [PlaylistCellViewModel])
+        case recommendedTracks(viewModels: [RecommendedTrackCellViewModel])
+        
+        var title: String {
+            switch self {
+            case .newReleases: return "New Release Albums"
+            case .featuredPlaylists: return "Featured Playlists"
+            case .recommendedTracks: return "Recommended"
+            }
         }
     }
-}
 
-class HomeViewController: UIViewController {
+    // MARK: - Properties
     
     private var collectionView: UICollectionView = UICollectionView(
         frame: .zero, collectionViewLayout: UICollectionViewCompositionalLayout { sectionIndex, _ -> NSCollectionLayoutSection? in
@@ -42,6 +46,8 @@ class HomeViewController: UIViewController {
     private var tracks: [AudioTrack] = []
     
     
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -52,12 +58,15 @@ class HomeViewController: UIViewController {
         configureCollectionView()
         view.addSubview(spinner)
         fetchData()
+        addLongTapGesture()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         collectionView.frame = view.bounds
     }
+    
+    // MARK: - Layout
     
     private func configureCollectionView() {
         view.addSubview(collectionView)
@@ -71,7 +80,6 @@ class HomeViewController: UIViewController {
         collectionView.backgroundColor = .systemBackground
     }
     
-    // actual layout
     private static func createSectionLayout(section: Int) -> NSCollectionLayoutSection {
         let supplementaryViews = [
             NSCollectionLayoutBoundarySupplementaryItem(
@@ -197,6 +205,8 @@ class HomeViewController: UIViewController {
         }
     }
     
+    // MARK: -  Functions
+    
     @objc func didTapSettings() {
         let vc = SettingsViewController()
         vc.title = "Settings"
@@ -234,6 +244,48 @@ class HomeViewController: UIViewController {
         }))
 
         collectionView.reloadData()
+    }
+    
+    private func addLongTapGesture() {
+        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(didLongPress(_:)))
+        collectionView.isUserInteractionEnabled = true
+        collectionView.addGestureRecognizer(gesture)
+    }
+    
+    @objc func didLongPress(_ gesture: UILongPressGestureRecognizer) {
+        guard gesture.state == .began else {
+            return
+        }
+        
+        let touchPoint = gesture.location(in: collectionView)
+        guard let indexPath = collectionView.indexPathForItem(at: touchPoint),
+              indexPath.section == 2 else {
+            return
+        }
+        
+        let model = tracks[indexPath.row]
+        
+        let actionSheet = UIAlertController(
+            title: model.name,
+            message: "Would you like to add this to a playlist?",
+            preferredStyle: .actionSheet)
+        
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        actionSheet.addAction(UIAlertAction(title: "Add to Playlist", style: .default, handler: { [weak self] _ in
+            DispatchQueue.main.async {
+                let vc = LibraryPlaylistsViewController()
+                // Pass back playlist to the caller
+                vc.selectionHandler = { playlist in
+                    APICaller.shared.addTrackToPlalist(track: model, playlist: playlist) { success in
+                        // Display alert Added to playlist (Name)
+                    }
+                }
+                vc.title = "Select Playlist"
+                
+                self?.present(vc, animated: true, completion: nil)
+            }
+        }))
+        present(actionSheet, animated: true)
     }
     
     private func fetchData() {
@@ -293,6 +345,7 @@ class HomeViewController: UIViewController {
         // When group queue is done execute
         group.notify(queue: .main) {
             guard let newAlbums = newReleases?.albums.items,
+//                  let playlists = featuredPlaylist?.playlists.items else {
                   let playlists = featuredPlaylist?.playlists.items,
                   let tracks = recommendations?.tracks else {
                 
@@ -357,7 +410,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             navigationController?.pushViewController(vc, animated: true)
         case .recommendedTracks:
             let track = tracks[indexPath.row]
-            PlaybackPresenter.startPlayback(from: self, track: track)
+            PlaybackPresenter.shared.startPlayback(from: self, track: track)
         }
     }
     

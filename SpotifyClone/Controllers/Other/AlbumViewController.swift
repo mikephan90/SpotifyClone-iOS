@@ -17,6 +17,29 @@ class AlbumViewController: UIViewController {
     
     private var tracks = [AudioTrack]()
     
+    // Need to display this album depending on where we are coming from. see isOwner in playlist
+    
+    private lazy var shareAlbumButton: UIBarButtonItem = {
+       let button = UIBarButtonItem(
+        barButtonSystemItem: .action,
+        target: self,
+        action: #selector(didTapShare))
+        
+        return button
+    }()
+    
+    private lazy var saveAlbumButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(
+            image: UIImage(systemName: "square.and.arrow.down"),
+            style: .done,
+            target: self,
+            action: #selector(didTapActions)
+        )
+        
+        return button
+    }()
+    
+    
     // MARK: - Init
     
     init(album: Album) {
@@ -85,6 +108,17 @@ class AlbumViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         
+        fetchData()
+    
+        
+        navigationItem.rightBarButtonItems = [saveAlbumButton, shareAlbumButton]
+        
+        
+    }
+    
+    // MARK: - Functions
+    
+    func fetchData() {
         APICaller.shared.getAlbumDetails(for: album) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
@@ -102,11 +136,25 @@ class AlbumViewController: UIViewController {
                 }
             }
         }
+    }
+    
+    @objc func didTapActions() {
+        let actionSheet = UIAlertController(title: album.name, message: "Actions", preferredStyle: .actionSheet)
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            barButtonSystemItem: .action,
-            target: self,
-            action: #selector(didTapShare))
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        actionSheet.addAction(UIAlertAction(title: "Save Album", style: .default, handler: { [weak self]  _ in
+            guard let sself = self else { return }
+            APICaller.shared.saveAlbum(album: sself.album) { success in
+                // Add alert to confirm saved
+                
+                // This will notify center to see to update
+                if success {
+                    NotificationCenter.default.post(name: .albumSavedNotification, object: nil)
+                }
+            }
+        }))
+        
+        present(actionSheet, animated: true, completion: nil)
     }
     
     @objc private func didTapShare() {
@@ -171,12 +219,24 @@ extension AlbumViewController: UICollectionViewDelegate, UICollectionViewDataSou
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         let track = tracks[indexPath.row]
-        PlaybackPresenter.startPlayback(from: self, track: track)
+        
+        // Create a copy of the immutable 'track' to pass album
+        var trackMutable = track
+        trackMutable.album = self.album
+        let trackWithAlbum: AudioTrack = trackMutable
+        
+        PlaybackPresenter.shared.startPlayback(from: self, track: trackWithAlbum)
     }
 }
 
 extension AlbumViewController: PlaylistHeaderCollectionReusableViewDelegate {
     func playlistHeaderCollectionReusableViewDidTapPlayAll(_ header: PlaylistHeaderCollectionReusableView) {
-        PlaybackPresenter.startPlayback(from: self, tracks: tracks)
+        let tracksWithAlbum: [AudioTrack] = tracks.compactMap({
+            var track = $0
+            track.album = self.album
+            return track
+        })
+        
+        PlaybackPresenter.shared.startPlayback(from: self, tracks: tracksWithAlbum)
     }
 }
