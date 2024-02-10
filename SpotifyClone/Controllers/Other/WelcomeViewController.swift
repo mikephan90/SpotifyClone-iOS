@@ -9,7 +9,12 @@ import UIKit
 
 class WelcomeViewController: UIViewController {
     
-    // Create sign in button
+    // MARK: - Properties
+    
+    private let viewModel = WelcomeViewModel()
+    
+    // MARK: - Views
+    
     private let signInButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .white
@@ -50,18 +55,14 @@ class WelcomeViewController: UIViewController {
         
         return label
     }()
-
+    
+    // MARK: - Lifecyle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        title = "Spotify"
-        view.backgroundColor = .systemGreen
-        signInButton.addTarget(self, action: #selector(didTapSignIn), for: .touchUpInside)
-        view.addSubview(bgImageView)
-        view.addSubview(overlayView)
-        view.addSubview(logoImageView)
-        view.addSubview(label)
-        view.addSubview(signInButton)
+        
+        setUpViews()
+        setUpViewModel()
     }
     
     override func viewDidLayoutSubviews() {
@@ -81,18 +82,32 @@ class WelcomeViewController: UIViewController {
         label.frame = CGRect(x: 30, y: logoImageView.bottom+30, width: view.width-60, height: 150)
     }
     
-    @objc func didTapSignIn() {
-        let vc = AuthViewController()
-        
-        vc.completionHandler = { [weak self] success in
-            // Sync in the main thread
+    
+    // MARK: - Private Functions
+    
+    private func setUpViews() {
+        title = "Spotify"
+        view.backgroundColor = .systemGreen
+        signInButton.addTarget(self, action: #selector(didTapSignIn), for: .touchUpInside)
+        view.addSubview(bgImageView)
+        view.addSubview(overlayView)
+        view.addSubview(logoImageView)
+        view.addSubview(label)
+        view.addSubview(signInButton)
+    }
+    
+    private func setUpViewModel() {
+        viewModel.signInCompletion = { [weak self] success in
             DispatchQueue.main.async {
                 self?.handleSignIn(success: success)
             }
         }
-        vc.navigationItem.largeTitleDisplayMode = .never
-        // Push vc to screen
-        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    // MARK: - Action Methods
+    
+    @objc func didTapSignIn() {
+        viewModel.signIn(navigationController: navigationController)
     }
     
     private func handleSignIn(success: Bool) {
