@@ -9,54 +9,60 @@ import SafariServices
 import UIKit
 
 class SearchViewController: UIViewController, UISearchResultsUpdating {
-    
+
     // MARK: - Properties
     
+    private var viewModel = SearchViewModel()
+    private var categories = [Category]()
+    private var collectionView: UICollectionView!
     let searchController: UISearchController = {
         let vc = UISearchController(searchResultsController: SearchResultsViewController())
         vc.searchBar.placeholder = "Songs, Artists, Albums"
         vc.searchBar.searchBarStyle = .minimal
         vc.definesPresentationContext = true
-        
         return vc
     }()
     
-    private var categories = [Category]()
-    
-    private let collectionView: UICollectionView = UICollectionView(
-        frame: .zero,
-        collectionViewLayout: UICollectionViewCompositionalLayout(sectionProvider: { _, _ -> NSCollectionLayoutSection? in
-            let item = NSCollectionLayoutItem(
-                layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)
-                                                  ))
-            
-            item.contentInsets = NSDirectionalEdgeInsets(
-                top: 2,
-                leading: 7,
-                bottom: 2,
-                trailing: 7
-            )
-            
-            let group = NSCollectionLayoutGroup.horizontal(
-                layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(150)),
-                subitem: item,
-                count: 2
-            )
-            
-            group.contentInsets = NSDirectionalEdgeInsets(
-                top: 10,
-                leading: 0,
-                bottom: 10,
-                trailing: 0
-            )
-            
-            return NSCollectionLayoutSection(group: group)
-        }))
     
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
+        fetchData()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        collectionView.frame = view.bounds
+    }
+    
+    // MARK: - UI Setup
+    
+    private func setupUI() {
+        collectionView = UICollectionView(
+            frame: .zero,
+            collectionViewLayout: UICollectionViewCompositionalLayout(sectionProvider: { _, _ -> NSCollectionLayoutSection? in
+                let item = NSCollectionLayoutItem(
+                    layoutSize: NSCollectionLayoutSize(
+                        widthDimension: .fractionalWidth(0.5),
+                        heightDimension: .fractionalHeight(1)
+                    ))
+                
+                item.contentInsets = NSDirectionalEdgeInsets(top: 2, leading: 7, bottom: 2, trailing: 7)
+                
+                let group = NSCollectionLayoutGroup.horizontal(
+                    layoutSize: NSCollectionLayoutSize(
+                        widthDimension: .fractionalWidth(1),
+                        heightDimension: .absolute(150)),
+                    subitems: Array(repeating: item, count: 2)
+                )
+                
+                group.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0)
+                
+                return NSCollectionLayoutSection(group: group)
+            }))
+        
         view.backgroundColor = .systemBackground
         
         searchController.searchResultsUpdater = self
@@ -65,31 +71,34 @@ class SearchViewController: UIViewController, UISearchResultsUpdating {
         
         view.addSubview(collectionView)
         
-        collectionView.register(CategoryCollectionViewCell.self, forCellWithReuseIdentifier: CategoryCollectionViewCell.identifier)
+        collectionView.register(
+            CategoryCollectionViewCell.self,
+            forCellWithReuseIdentifier: CategoryCollectionViewCell.identifier)
+        
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = .systemBackground
-        
-        APICaller.shared.getCategories { [weak self] result in
+    }
+    
+    // MARK: - Data Fetching
+    
+    private func fetchData() {
+        viewModel.fetchData { [weak self] result in
+            guard let self = self else { return }
             DispatchQueue.main.async {
                 switch result {
                 case .success(let categories):
-                    self?.categories = categories
-                    self?.collectionView.reloadData()
-                case .failure(let error): break
+                    self.categories = categories
+                    self.collectionView.reloadData()
+                case .failure(let error):
+                    print(error.localizedDescription)
                 }
             }
-        
         }
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        collectionView.frame = view.bounds
-    }
-    
     func updateSearchResults(for searchController: UISearchController) {
-      
+        // Required but not used. Future enhancement
     }
 }
 
@@ -165,9 +174,7 @@ extension SearchViewController: UISearchBarDelegate, SearchResultViewControllerD
             return
         }
         
-        resultsController.delegate = self
-        
-        APICaller.shared.search(with: query) { result in
+       viewModel.search(with: query) { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let results):
