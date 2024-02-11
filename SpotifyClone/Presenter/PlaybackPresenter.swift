@@ -37,11 +37,8 @@ final class PlaybackPresenter {
     var currentTrack: AudioTrack? {
         if let track = track, tracks.isEmpty {
             return track
-            
-        } else if let player = self.playerQueue, !tracks.isEmpty {
-           
-                return tracks[currentTrackIndex]
-          
+        } else if !tracks.isEmpty {
+            return tracks[currentTrackIndex]
         }
         currentTrackIndex = 0 /// If track reaches end of playlist/album, reset to first
         return nil
@@ -79,6 +76,9 @@ final class PlaybackPresenter {
             guard let url = URL(string: $0.preview_url ?? "") else { return nil }
             return AVPlayerItem(url: url)
         }))
+        
+        playerQueue?.pause()
+        playerQueue?.replaceCurrentItem(with: nil)
         
         playerQueue?.volume = getSystemOutputVolume()
         playerQueue?.play()
@@ -135,8 +135,6 @@ extension PlaybackPresenter: PlayerViewControllerDelegate {
             playerQueue?.play()
         }
     }
-    
-    
 }
 
 extension PlaybackPresenter: PlayerDataSource {

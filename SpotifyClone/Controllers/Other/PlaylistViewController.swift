@@ -135,8 +135,6 @@ class PlaylistViewController: UIViewController {
                 }
             }
         }
-        
-        
     }
     
     // MARK: - Functions
@@ -161,21 +159,13 @@ class PlaylistViewController: UIViewController {
         actionSheet.addAction(UIAlertAction(title: "Remove", style: .destructive, handler: { [weak self] _ in
             guard let sself = self else { return }
             
-            APICaller.shared.removeTrackFromPlaylist(track: trackToDelete, playlist: sself.playlist) { success in
+            sself.viewModel.removeTrack(track: trackToDelete, from: sself.playlist, completion: { success in
                 DispatchQueue.main.async {
                     sself.tracks.remove(at: indexPath.row)
                     sself.viewModel.viewModels.remove(at: indexPath.row)
                     sself.collectionView.reloadData()
                 }
-            }
-            
-            //            sself.viewModel.removeTrack(track: trackToDelete, from: sself.playlist, completion: { success in
-            //                DispatchQueue.main.async {
-            //                    sself.tracks.remove(at: indexPath.row)
-            //                    sself.viewModel.viewModels.remove(at: indexPath.row)
-            //                    sself.collectionView.reloadData()
-            //                }
-            //            })
+            })
         }))
         
         present(actionSheet, animated: true, completion: nil)
@@ -259,7 +249,6 @@ extension PlaylistViewController: PlaylistViewModelDelegate {
         print("Failed to remove track")
     }
 }
-
 
 extension PlaylistViewController: PlaylistHeaderCollectionReusableViewDelegate {
     func playlistHeaderCollectionReusableViewDidTapPlayAll(_ header: PlaylistHeaderCollectionReusableView) {

@@ -97,6 +97,16 @@ final class PlayerControlsView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setupUI()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError()
+    }
+    
+    // MARK: - Setup UI
+    
+    private func setupUI() {
         backgroundColor = .clear
         
         addSubview(nameLabel)
@@ -115,10 +125,6 @@ final class PlayerControlsView: UIView {
         clipsToBounds = true
     }
     
-    required init?(coder: NSCoder) {
-        fatalError()
-    }
-    
     // MARK: - Lifecycle
     
     override func layoutSubviews() {
@@ -126,6 +132,7 @@ final class PlayerControlsView: UIView {
         nameLabel.frame = CGRect(x: 0, y: 0, width: width, height: 50)
         subtitleLabel.frame = CGRect(x: 0, y: nameLabel.bottom, width: width, height: 50)
         
+        // replace this with track playback
         volumeSlider.frame = CGRect(x: 10, y: subtitleLabel.bottom + 20, width: width - 20, height: 44)
         
         let buttonSize: CGFloat = 60
