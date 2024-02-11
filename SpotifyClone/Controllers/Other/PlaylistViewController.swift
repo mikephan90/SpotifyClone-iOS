@@ -129,7 +129,6 @@ class PlaylistViewController: UIViewController {
                 switch result {
                 case .success(let model):
                     self?.updateUI(with: model)
-                    self?.collectionView.reloadData()
                 case .failure(let error):
                     print(error.localizedDescription)
                 }
@@ -229,7 +228,7 @@ extension PlaylistViewController: UICollectionViewDelegate, UICollectionViewData
         collectionView.deselectItem(at: indexPath, animated: true)
         
         let track = tracks[indexPath.row]
-        PlaybackPresenter.shared.startPlayback(from: self, track: track)
+        PlaybackPresenter.shared.startPlayback(from: self, tracks: tracks, at: indexPath.row)
     }
     
     func collectionView(_ collectionView: UICollectionView, canEditItemAt indexPath: IndexPath) -> Bool {
@@ -252,6 +251,6 @@ extension PlaylistViewController: PlaylistViewModelDelegate {
 
 extension PlaylistViewController: PlaylistHeaderCollectionReusableViewDelegate {
     func playlistHeaderCollectionReusableViewDidTapPlayAll(_ header: PlaylistHeaderCollectionReusableView) {
-        PlaybackPresenter.shared.startPlayback(from: self, tracks: tracks)
+        PlaybackPresenter.shared.startPlayback(from: self, tracks: tracks, at: 0)
     }
 }

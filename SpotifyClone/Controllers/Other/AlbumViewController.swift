@@ -254,6 +254,6 @@ extension AlbumViewController: PlaylistHeaderCollectionReusableViewDelegate {
             return track
         })
         
-        PlaybackPresenter.shared.startPlayback(from: self, tracks: tracksWithAlbum)
+        PlaybackPresenter.shared.startPlayback(from: self, tracks: tracksWithAlbum, at: 0)
     }
 }

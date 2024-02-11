@@ -91,6 +91,7 @@
 		B186CD192B78A610002FCF6D /* PlaylistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B186CD182B78A610002FCF6D /* PlaylistViewModel.swift */; };
 		B186CD212B78AE75002FCF6D /* SpotifyCloneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B186CD202B78AE75002FCF6D /* SpotifyCloneTests.swift */; };
 		B1CFFF592B79559100229CF1 /* PlayerControlsViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CFFF582B79559100229CF1 /* PlayerControlsViewViewModel.swift */; };
+		B1CFFF612B7986E900229CF1 /* PlaybackControlsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CFFF602B7986E900229CF1 /* PlaybackControlsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -190,6 +191,7 @@
 		B186CD1E2B78AE75002FCF6D /* SpotifyCloneTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpotifyCloneTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B186CD202B78AE75002FCF6D /* SpotifyCloneTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyCloneTests.swift; sourceTree = "<group>"; };
 		B1CFFF582B79559100229CF1 /* PlayerControlsViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerControlsViewViewModel.swift; sourceTree = "<group>"; };
+		B1CFFF602B7986E900229CF1 /* PlaybackControlsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackControlsViewController.swift; sourceTree = "<group>"; };
 		CD0A4716A77DE157AD0B40DD /* Pods-SpotifyClone.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpotifyClone.debug.xcconfig"; path = "Target Support Files/Pods-SpotifyClone/Pods-SpotifyClone.debug.xcconfig"; sourceTree = "<group>"; };
 		D816359CAC2122838535E604 /* Pods_SpotifyClone.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SpotifyClone.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -374,6 +376,7 @@
 				B116ADBE2B71E4CB00932AE1 /* SettingsViewController.swift */,
 				B116ADC62B71E50000932AE1 /* SearchResultsViewController.swift */,
 				B116ADBC2B71E4B900932AE1 /* WelcomeViewController.swift */,
+				B1CFFF602B7986E900229CF1 /* PlaybackControlsViewController.swift */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -642,6 +645,7 @@
 				B186CD122B789F74002FCF6D /* ProfileHeaderView.swift in Sources */,
 				B186CD0D2B7886E9002FCF6D /* LibraryAlbumViewModel.swift in Sources */,
 				B116AE1B2B754FCD00932AE1 /* TitleHeaderCollectionReusableView.swift in Sources */,
+				B1CFFF612B7986E900229CF1 /* PlaybackControlsViewController.swift in Sources */,
 				B116AE132B744B4A00932AE1 /* PlaylistDetailsResponse.swift in Sources */,
 				B116ADDD2B72AB3E00932AE1 /* AuthResponse.swift in Sources */,
 				B186CD0B2B78863A002FCF6D /* LibraryPlaylistsViewModel.swift in Sources */,

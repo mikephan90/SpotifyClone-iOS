@@ -30,7 +30,9 @@ final class PlaybackPresenter {
     
     private var track: AudioTrack?  /// Keep track of reference of track
     
-    private var tracks =  [AudioTrack]()
+    private var tracks = [AudioTrack]()
+    
+    private var currTrack: AudioTrack?
     
     var currentTrackIndex = 0
     
@@ -64,7 +66,9 @@ final class PlaybackPresenter {
         self.playerVC = vc
     }
     
-    func startPlayback(from viewController: UIViewController, tracks: [AudioTrack]) {
+    func startPlayback(from viewController: UIViewController, tracks: [AudioTrack], at index: Int) {
+        currentTrackIndex = index
+        
         let vc = PlayerViewController()
         vc.dataSource = self
         vc.delegate = self
@@ -77,12 +81,15 @@ final class PlaybackPresenter {
             return AVPlayerItem(url: url)
         }))
         
-        playerQueue?.pause()
-        playerQueue?.replaceCurrentItem(with: nil)
-        
-        playerQueue?.volume = getSystemOutputVolume()
-        playerQueue?.play()
-        
+        if currentTrackIndex >= 0 && currentTrackIndex < tracks.count {
+            // Go to the desired item in the player queue
+            for _ in 0..<currentTrackIndex {
+                playerQueue?.advanceToNextItem()
+            }
+            
+            // Play the player queue
+            playerQueue?.play()
+        }
         viewController.present(UINavigationController(rootViewController: vc), animated: true) { [weak self] in
             self?.playerQueue?.play()
         }
@@ -113,26 +120,46 @@ extension PlaybackPresenter: PlayerViewControllerDelegate {
     }
     
     func didTapNext() {
-        if tracks.isEmpty {
-            // Not playlist or album
+        guard !tracks.isEmpty else {
             audioPlayer?.pause()
-        } else if let player = playerQueue {
+            return
+        }
+        
+        guard let player = playerQueue else {
+            return
+        }
+        
+        currentTrackIndex += 1
+        
+        if currentTrackIndex >= 0 && currentTrackIndex < tracks.count {
+            print(player.items())
+            
             player.advanceToNextItem()
-            currentTrackIndex += 1
+            playerVC?.refreshUI()
+            
+            player.play()
+        } else {
+            currentTrackIndex = 0
+
+            player.pause()
+            player.removeAllItems()
+            
+            playerQueue = AVQueuePlayer(items: tracks.compactMap { track in
+                guard let url = URL(string: track.preview_url ?? "") else { return nil }
+                return AVPlayerItem(url: url)
+            })
+            
+            player.play()
             playerVC?.refreshUI()
         }
     }
     
-    // TODO: FIX THIS TO GO BACK TO PREVIOUS SONG. KEEP TRACK OF LAST URL
     func didTapBack() {
         if tracks.isEmpty {
             audioPlayer?.pause()
             audioPlayer?.play()
-        } else if let firstItem = playerQueue?.items().first {
-            playerQueue?.pause()
-            playerQueue?.removeAllItems()
-            playerQueue = AVQueuePlayer(items: [firstItem])
-            playerQueue?.play()
+        } else if let player = playerQueue {
+        
         }
     }
 }
