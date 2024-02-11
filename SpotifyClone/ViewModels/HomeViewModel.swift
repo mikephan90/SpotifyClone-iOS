@@ -23,7 +23,7 @@ class HomeViewModel {
         
         group.enter()
         group.enter()
-        group.enter()
+//        group.enter()
         
         // New releases
         apiCaller.getNewReleases { result in
@@ -40,7 +40,7 @@ class HomeViewModel {
         }
         
         // Featured playlist
-        APICaller.shared.getFeaturedPlaylist { result in
+        apiCaller.getFeaturedPlaylist { result in
             defer {
                 group.leave()
             }
@@ -52,32 +52,32 @@ class HomeViewModel {
             }
         }
         
-        // Recommended tracks
-        APICaller.shared.getRecommendedGenres { result in
-            switch result {
-            case .success(let response):
-                let genres = response.genres
-                var seeds = Set<String>()
-                while seeds.count < 5 {
-                    if let random = genres.randomElement() {
-                        seeds.insert(random)
-                    }
-                }
-                APICaller.shared.getRecommendations(genres: seeds) { recommendedResult in
-                    defer {
-                        group.leave()
-                    }
-                    switch recommendedResult {
-                    case .success(let response):
-                        tracks = response.tracks
-                    case .failure(let error):
-                        completion(.failure(error))
-                    }
-                }
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
+//        // Recommended tracks
+//        apiCaller.getRecommendedGenres { result in
+//            switch result {
+//            case .success(let response):
+//                let genres = response.genres
+//                var seeds = Set<String>()
+//                while seeds.count < 5 {
+//                    if let random = genres.randomElement() {
+//                        seeds.insert(random)
+//                    }
+//                }
+//                APICaller.shared.getRecommendations(genres: seeds) { recommendedResult in
+//                    defer {
+//                        group.leave()
+//                    }
+//                    switch recommendedResult {
+//                    case .success(let response):
+//                        tracks = response.tracks
+//                    case .failure(let error):
+//                        completion(.failure(error))
+//                    }
+//                }
+//            case .failure(let error):
+//                completion(.failure(error))
+//            }
+//        }
         
         // When group queue is done execute
         group.notify(queue: .main) {

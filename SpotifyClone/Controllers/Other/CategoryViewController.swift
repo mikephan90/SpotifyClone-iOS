@@ -12,19 +12,22 @@ class CategoryViewController: UIViewController {
     // MARK: - Properties
     
     let category: Category
+    var viewModel = CategoryViewModel()
+    private var playlists = [Playlist]()
     
-    private let collectionView = UICollectionView(
+    // MARK: - Views
+    
+    private lazy var collectionView = UICollectionView(
         frame: .zero,
         collectionViewLayout: UICollectionViewCompositionalLayout(sectionProvider: { _, _ -> NSCollectionLayoutSection?  in
             let item = NSCollectionLayoutItem(
-                layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)))
+                layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalHeight(1)))
             
             item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
     
             let group = NSCollectionLayoutGroup.horizontal(
                 layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(250)),
-                subitem: item,
-                count: 2
+                subitems: Array(repeating: item, count: 2)
             )
             
             group.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
@@ -32,7 +35,6 @@ class CategoryViewController: UIViewController {
             return NSCollectionLayoutSection(group: group)
         }))
     
-    private var playlists = [Playlist]()
     
     // MARK: - Init
     
@@ -49,6 +51,18 @@ class CategoryViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
+        fetchData()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        collectionView.frame = view.bounds
+    }
+    
+    // MARK: - SetupUI
+    
+    private func setupUI() {
         title = category.name
         view.addSubview(collectionView)
         view.backgroundColor = .systemBackground
@@ -57,8 +71,12 @@ class CategoryViewController: UIViewController {
         collectionView.register(PlaylistCollectionViewCell.self, forCellWithReuseIdentifier: PlaylistCollectionViewCell.identifier)
         collectionView.delegate = self
         collectionView.dataSource = self
-        
-        APICaller.shared.getCategoryPlaylist(category: category) { [weak self] result in
+    }
+    
+    // MARK: - Fetch Data
+    
+    private func fetchData() {
+        viewModel.fetchData(category: category) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let playlists):
@@ -69,11 +87,6 @@ class CategoryViewController: UIViewController {
                 }
             }
         }
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        collectionView.frame = view.bounds
     }
 }
 
