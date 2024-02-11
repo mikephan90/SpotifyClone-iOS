@@ -62,7 +62,7 @@ class PlayerViewController: UIViewController {
     private func configure() {
         // TODO: BUG Here, image doesn't not display on when refreshing to back to first
         imageView.sd_setImage(with: dataSource?.imageUrl, completed: nil)
-        controlsView.configure(with: PlayerControlsViewViewModel(
+        controlsView.configure(with: PlayerControlsViewModel(
             title: dataSource?.songName,
             subtitle: dataSource?.subtitle)
         )

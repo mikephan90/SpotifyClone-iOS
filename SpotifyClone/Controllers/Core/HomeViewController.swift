@@ -14,7 +14,7 @@ class HomeViewController: UIViewController {
     enum BrowseSectionType {
         case newReleases(viewModels: [NewReleasesCellViewModel])
         case featuredPlaylists(viewModels: [PlaylistCellViewModel])
-        case recommendedTracks(viewModels: [RecommendedTrackCellViewModel])
+        case recommendedTracks(viewModels: [TrackCellViewModel])
         
         var title: String {
             switch self {
@@ -105,7 +105,7 @@ class HomeViewController: UIViewController {
             )
         }))
         sections.append(.recommendedTracks(viewModels: tracks.compactMap {
-            return RecommendedTrackCellViewModel(
+            return TrackCellViewModel(
                 name: $0.name,
                 artistName: $0.artists.first?.name ?? "",
                 artworkUrl: URL(string: $0.album?.images.first?.url ?? "")

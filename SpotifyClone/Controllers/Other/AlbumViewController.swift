@@ -11,13 +11,15 @@ class AlbumViewController: UIViewController {
     
     // MARK: - Properties
     
-    private let album: Album 
-    
-    private var viewModels = [AlbumCollectionViewCellViewModel]()
-    
+    // public var fromUserAlbus
+    private let album: Album
+    private var viewModel: AlbumViewModel
+    private var collectionView: UICollectionView!
     private var tracks = [AudioTrack]()
     
     // Need to display this album depending on where we are coming from. see isOwner in playlist
+    
+    // MARK: - Views
     
     private lazy var shareAlbumButton: UIBarButtonItem = {
        let button = UIBarButtonItem(
@@ -44,6 +46,7 @@ class AlbumViewController: UIViewController {
     
     init(album: Album) {
         self.album = album
+        self.viewModel = AlbumViewModel(album: album)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -51,48 +54,22 @@ class AlbumViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private let collectionView = UICollectionView(
-        frame: .zero,
-        collectionViewLayout: UICollectionViewCompositionalLayout(sectionProvider: { _, _ -> NSCollectionLayoutSection? in
-            let item = NSCollectionLayoutItem(
-                layoutSize: NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .fractionalHeight(1)
-                )
-            )
-            
-            item.contentInsets = NSDirectionalEdgeInsets(top: 1, leading: 2, bottom: 1, trailing: 2)
-            
-            let group = NSCollectionLayoutGroup.vertical(
-                layoutSize: NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .absolute(60)
-                ),
-                subitem: item,
-                count: 1
-            )
-            
-            let section = NSCollectionLayoutSection(group: group)
-            
-            section.boundarySupplementaryItems = [
-                NSCollectionLayoutBoundarySupplementaryItem(
-                    layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.5)),
-                    elementKind: UICollectionView.elementKindSectionHeader,
-                    alignment: .top
-                )
-            ]
-            return section
-        })
-    )
-    
-    
-    
+  
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
+        fetchData()
+        
+    }
+    
+    // MARK: - Setup UI
+    
+    private func setupUI() {
         title = album.name
         view.backgroundColor = .systemBackground
+        collectionView = setupCollectionView()
         view.addSubview(collectionView)
-        
+       
         collectionView.register(
             PlaylistHeaderCollectionReusableView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
@@ -108,33 +85,76 @@ class AlbumViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         
-        fetchData()
-    
-        
         navigationItem.rightBarButtonItems = [saveAlbumButton, shareAlbumButton]
+    }
+    
+    private func setupCollectionView() -> UICollectionView {
+        return UICollectionView(
+            frame: .zero,
+            collectionViewLayout: UICollectionViewCompositionalLayout(sectionProvider: { _, _ -> NSCollectionLayoutSection? in
+                let item = NSCollectionLayoutItem(
+                    layoutSize: NSCollectionLayoutSize(
+                        widthDimension: .fractionalWidth(1.0),
+                        heightDimension: .fractionalHeight(1)
+                    )
+                )
+                
+                item.contentInsets = NSDirectionalEdgeInsets(top: 1, leading: 2, bottom: 1, trailing: 2)
+                
+                let group = NSCollectionLayoutGroup.vertical(
+                    layoutSize: NSCollectionLayoutSize(
+                        widthDimension: .fractionalWidth(1.0),
+                        heightDimension: .absolute(60)
+                    ),
+                    subitems: Array(repeating: item, count: 1)
+                )
+                
+                let section = NSCollectionLayoutSection(group: group)
+                
+                section.boundarySupplementaryItems = [
+                    NSCollectionLayoutBoundarySupplementaryItem(
+                        layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.5)),
+                        elementKind: UICollectionView.elementKindSectionHeader,
+                        alignment: .top
+                    )
+                ]
+                return section
+            })
+        )
+    }
+    
+    private func updateUI(with model: AlbumDetailsResponse) {
+        let tracks = model.tracks.items
+        let trackViewModels = model.tracks.items.compactMap { track -> AlbumCollectionViewCellViewModel? in
+            
+            return  AlbumCollectionViewCellViewModel(
+                name: track.name,
+                artistName: track.artists.first?.name ?? "-"
+            )
+        }
+        
+        self.tracks = tracks
+        self.viewModel.viewModels = trackViewModels
+        
+        collectionView.reloadData()
     }
     
     // MARK: - Functions
     
-    func fetchData() {
-        APICaller.shared.getAlbumDetails(for: album) { [weak self] result in
+    private func fetchData() {
+        viewModel.fetchData(album: album) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let model):
-                    self?.tracks = model.tracks.items
-                    self?.viewModels = model.tracks.items.compactMap{
-                        AlbumCollectionViewCellViewModel(
-                            name: $0.name,
-                            artistName: $0.artists.first?.name ?? "-"
-                        )
-                                                   }
-                    self?.collectionView.reloadData()
+                    self?.updateUI(with: model)
                 case .failure(let error):
                     print(error.localizedDescription)
                 }
             }
         }
     }
+    
+    // MARK: - Methods
     
     @objc func didTapActions() {
         let actionSheet = UIAlertController(title: album.name, message: "Actions", preferredStyle: .actionSheet)
@@ -177,7 +197,7 @@ extension AlbumViewController: UICollectionViewDelegate, UICollectionViewDataSou
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModels.count
+        return viewModel.viewModels.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -187,7 +207,7 @@ extension AlbumViewController: UICollectionViewDelegate, UICollectionViewDataSou
         ) as? AlbumTrackCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.configure(with: viewModels[indexPath.row])
+        cell.configure(with: viewModel.viewModels[indexPath.row])
         return cell
     }
     

@@ -8,7 +8,12 @@
 import UIKit
 
 class RecommendedTrackCollectionViewCell: UICollectionViewCell {
+    
+    // MARK: - Propeties
+    
     static let identifier = "RecommendedTrackCollectionViewCell"
+    
+    // MARK: - Views
     
     private let albumCoverImageView: UIImageView = {
         let imageView = UIImageView()
@@ -34,6 +39,8 @@ class RecommendedTrackCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    // MARK: - Init
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -50,6 +57,8 @@ class RecommendedTrackCollectionViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError()
     }
+    
+    // MARK: -  UI
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -79,7 +88,7 @@ class RecommendedTrackCollectionViewCell: UICollectionViewCell {
     }
     
     // Configure Cell with viewModel info
-    func configure(with viewModel: RecommendedTrackCellViewModel) {
+    func configure(with viewModel: TrackCellViewModel) {
         trackNameLabel.text = viewModel.name
         artistNameLabel.text = viewModel.artistName
         albumCoverImageView.sd_setImage(with: viewModel.artworkUrl, completed: nil)

@@ -16,8 +16,9 @@ class PlaylistHeaderCollectionReusableView: UICollectionReusableView {
     // MARK: - Properties
     
     static let identifier = "PlaylistHeaderCollectionReusableView"
-    
     weak var delegate: PlaylistHeaderCollectionReusableViewDelegate?
+    
+    // MARK: -  Views
     
     private let nameLabel: UILabel = {
         let label = UILabel()
@@ -73,6 +74,8 @@ class PlaylistHeaderCollectionReusableView: UICollectionReusableView {
     required init?(coder: NSCoder) {
         fatalError()
     }
+    
+    // MARK: - Methods
     
     @objc private func didTapPlayAll() {
         delegate?.playlistHeaderCollectionReusableViewDidTapPlayAll(self)

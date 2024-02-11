@@ -32,7 +32,7 @@ class ProfileHeaderView: UIView {
         fatalError()
     }
     
-    // MARK: - Configure
+    // MARK: - UI
     
     func configure(with imageUrl: String?) {
         guard let urlString = imageUrl,

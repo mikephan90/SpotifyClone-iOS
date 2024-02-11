@@ -14,6 +14,8 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "CategoryCollectionViewCell"
     
+    // MARK: - Views
+    
     private let imageView: UIImageView = {
        let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit

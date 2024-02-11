@@ -9,7 +9,12 @@ import UIKit
 import SDWebImage
 
 class NewReleasesCollectionViewCell: UICollectionViewCell {
+    
+    // MARK: - Properties
+    
     static let identifier = "NewReleasesCollectionViewCell"
+    
+    // MARK: - Views
     
     private let albumCoverImageView: UIImageView = {
         let imageView = UIImageView()
@@ -43,6 +48,8 @@ class NewReleasesCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    // MARK: - Inits
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -60,6 +67,8 @@ class NewReleasesCollectionViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError()
     }
+    
+    // MARK: - UI
     
     override func layoutSubviews() {
         super.layoutSubviews()

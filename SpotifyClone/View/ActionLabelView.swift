@@ -61,7 +61,7 @@ class ActionLabelView: UIView {
         label.frame = CGRect(x: 0, y: 0, width: width, height: height - 45)
     }
     
-    // MARK: - Function
+    // MARK: - Methods
     
     @objc func didTapButton() {
         delegate?.actionLabelViewDidTapButton(self)

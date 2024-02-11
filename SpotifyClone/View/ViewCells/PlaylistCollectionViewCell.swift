@@ -8,7 +8,12 @@
 import UIKit
 
 class PlaylistCollectionViewCell: UICollectionViewCell {
+    
+    // MARK: - Propeties
+    
     static let identifier = "PlaylistCollectionViewCell"
+    
+    // MARK: - Views
     
     private let playlistCoverImageView: UIImageView = {
         let imageView = UIImageView()
@@ -38,6 +43,8 @@ class PlaylistCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    // MARK: - Init
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -51,6 +58,8 @@ class PlaylistCollectionViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError()
     }
+    
+    // MARK: - UI
     
     override func layoutSubviews() {
         super.layoutSubviews()

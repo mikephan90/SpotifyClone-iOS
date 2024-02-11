@@ -24,8 +24,9 @@ class LibraryToggleView: UIView {
     // MARK: - Properties
     
     var state: State = .playlist
-    
     weak var delegate: LibraryToggleViewDelegate?
+    
+    // MARK: - Views
     
     private let playlistButton: UIButton = {
         let button = UIButton()
@@ -78,7 +79,7 @@ class LibraryToggleView: UIView {
         
     }
     
-    // MARK: - Functions
+    // MARK: - Methods
     
     @objc func didTapPlaylist() {
         state = .playlist

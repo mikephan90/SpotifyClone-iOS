@@ -34,6 +34,8 @@ class TitleHeaderCollectionReusableView: UICollectionReusableView {
         fatalError()
     }
     
+    // MARK: - UI
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         labelText.frame = CGRect(x: 14, y: 0, width: width - 30, height: height)

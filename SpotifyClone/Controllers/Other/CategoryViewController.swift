@@ -14,26 +14,7 @@ class CategoryViewController: UIViewController {
     let category: Category
     var viewModel = CategoryViewModel()
     private var playlists = [Playlist]()
-    
-    // MARK: - Views
-    
-    private lazy var collectionView = UICollectionView(
-        frame: .zero,
-        collectionViewLayout: UICollectionViewCompositionalLayout(sectionProvider: { _, _ -> NSCollectionLayoutSection?  in
-            let item = NSCollectionLayoutItem(
-                layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalHeight(1)))
-            
-            item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
-    
-            let group = NSCollectionLayoutGroup.horizontal(
-                layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(250)),
-                subitems: Array(repeating: item, count: 2)
-            )
-            
-            group.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
-    
-            return NSCollectionLayoutSection(group: group)
-        }))
+    private var collectionView: UICollectionView!
     
     
     // MARK: - Init
@@ -64,6 +45,8 @@ class CategoryViewController: UIViewController {
     
     private func setupUI() {
         title = category.name
+        collectionView = setupCollectionView()
+        
         view.addSubview(collectionView)
         view.backgroundColor = .systemBackground
         collectionView.backgroundColor = .systemBackground
@@ -73,6 +56,31 @@ class CategoryViewController: UIViewController {
         collectionView.dataSource = self
     }
     
+    private func updateUI(with model: [Playlist]) {
+        self.playlists = model
+        self.collectionView.reloadData()
+    }
+    
+    private func setupCollectionView() -> UICollectionView {
+        return UICollectionView(
+            frame: .zero,
+            collectionViewLayout: UICollectionViewCompositionalLayout(sectionProvider: { _, _ -> NSCollectionLayoutSection?  in
+                let item = NSCollectionLayoutItem(
+                    layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalHeight(1)))
+                
+                item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+        
+                let group = NSCollectionLayoutGroup.horizontal(
+                    layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(250)),
+                    subitems: Array(repeating: item, count: 2)
+                )
+                
+                group.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+        
+                return NSCollectionLayoutSection(group: group)
+            }))
+    }
+    
     // MARK: - Fetch Data
     
     private func fetchData() {
@@ -80,8 +88,7 @@ class CategoryViewController: UIViewController {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let playlists):
-                    self?.playlists = playlists
-                    self?.collectionView.reloadData()
+                    self?.updateUI(with: playlists)
                 case .failure(let error):
                     print(error.localizedDescription)
                 }

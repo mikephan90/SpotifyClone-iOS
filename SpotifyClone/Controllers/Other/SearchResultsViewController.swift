@@ -32,18 +32,22 @@ class SearchResultsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        view.backgroundColor = .clear
-        view.addSubview(tableView)
-        
-        
-        tableView.delegate = self
-        tableView.dataSource = self
+        setupUI()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         tableView.frame = view.bounds
+    }
+    
+    // MARK: - Setup UI
+    
+    private func setupUI() {
+        view.backgroundColor = .clear
+        view.addSubview(tableView)
+    
+        tableView.delegate = self
+        tableView.dataSource = self
     }
     
     // MARK: - Functions

@@ -9,9 +9,11 @@ import UIKit
 
 class AlbumTrackCollectionViewCell: UICollectionViewCell {
     
-    // MARK: -
+    // MARK: - Properties
     
     static let identifier = "AlbumTrackCollectionViewCell"
+    
+    // MARK: - Views
     
     private let trackNameLabel: UILabel = {
         let label = UILabel()
@@ -29,6 +31,8 @@ class AlbumTrackCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    // MARK: - Init
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -44,6 +48,8 @@ class AlbumTrackCollectionViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError()
     }
+    
+    // MARK: - UI
     
     override func layoutSubviews() {
         super.layoutSubviews()

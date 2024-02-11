@@ -8,18 +8,34 @@
 import UIKit
 
 class SettingsViewController: UIViewController {
+    
+    // MARK: - Properties
 
+    private var sections = [Section]()
+    
+    // MARK: - Views
+    
     private let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell") // Can update this tableview cell
         return tableView
     }()
     
-    private var sections = [Section]()
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        setupUI()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        tableView.frame = view.bounds
+    }
+    
+    // MARK: - Setup UI
+    
+    private func setupUI() {
         configureModels()
         
         title = "Settings"
@@ -28,11 +44,6 @@ class SettingsViewController: UIViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        tableView.frame = view.bounds
     }
     
     private func configureModels() {
@@ -48,6 +59,8 @@ class SettingsViewController: UIViewController {
             }
         })]))
     }
+    
+    // MARK: - Functions
     
     private func viewProfile() {
         let vc = ProfileViewController()

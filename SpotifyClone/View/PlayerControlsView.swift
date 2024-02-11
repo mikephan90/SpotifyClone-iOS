@@ -15,13 +15,6 @@ protocol PlayerControlViewDelegate: AnyObject {
     func playerControllerView(_ playerControlsView: PlayerControlsView, didSlideSlider value: Float)
 }
 
-///temp view model
-
-struct PlayerControlsViewViewModel {
-    let title: String?
-    let subtitle: String?
-}
-
 final class PlayerControlsView: UIView {
     
     // MARK: - Properties
@@ -149,7 +142,7 @@ final class PlayerControlsView: UIView {
     
     // MARK: - Functions
     
-    func configure(with viewModel: PlayerControlsViewViewModel) {
+    func configure(with viewModel: PlayerControlsViewModel) {
         nameLabel.text = viewModel.title
         subtitleLabel.text = viewModel.subtitle
     }
