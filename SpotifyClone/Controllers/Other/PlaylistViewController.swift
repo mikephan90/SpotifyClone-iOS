@@ -36,8 +36,7 @@ class PlaylistViewController: UIViewController {
                     widthDimension: .fractionalWidth(1.0),
                     heightDimension: .absolute(60)
                 ),
-                subitem: item,
-                count: 1
+                subitems: Array(repeating: item, count: 1)
             )
             
             let section = NSCollectionLayoutSection(group: group)

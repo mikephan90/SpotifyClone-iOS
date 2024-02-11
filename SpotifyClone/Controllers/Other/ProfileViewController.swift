@@ -10,25 +10,28 @@ import SDWebImage
 
 class ProfileViewController: UIViewController {
     
+    // MARK: - Properties
+    
+    private var viewModel = ProfileViewModel()
+    private let headerView = ProfileHeaderView()
+    private var models = [String]()
+    
+    // MARK: - Views
+    
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.isHidden = true
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(ProfileTableViewCell.self, forCellReuseIdentifier: ProfileTableViewCell.identifier)
         
         return tableView
     }()
     
-    private var models = [String]()
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Profile"
-        view.addSubview(tableView)
+        setupUI()
         fetchProfile()
-        view.backgroundColor = .systemBackground
-        
-        tableView.delegate = self
-        tableView.dataSource = self
     }
     
     override func viewDidLayoutSubviews() {
@@ -36,8 +39,10 @@ class ProfileViewController: UIViewController {
         tableView.frame = view.bounds
     }
     
+    // MARK: - Fetching Data
+    
     private func fetchProfile() {
-        APICaller.shared.getCurrentUserProfile { [weak self] result in
+        viewModel.fetchProfile { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let model):
@@ -45,10 +50,21 @@ class ProfileViewController: UIViewController {
                 case .failure(let error):
                     print("Profile Error: " + error.localizedDescription)
                     self?.failedToGetProfile()
-                    
                 }
             }
         }
+    }
+    
+    // MARK: - Setup UI
+    
+    private func setupUI() {
+        title = "Profile"
+        view.addSubview(tableView)
+        view.backgroundColor = .systemBackground
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.tableHeaderView = headerView
     }
     
     private func updateUI(with model: UserProfile) {
@@ -86,6 +102,8 @@ class ProfileViewController: UIViewController {
         tableView.tableHeaderView = headerView
     }
     
+    // MARK: - Functions
+    
     private func failedToGetProfile() {
         let label = UILabel(frame: .zero)
         label.text = "Failed to load profile."
@@ -102,7 +120,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: ProfileTableViewCell.identifier, for: indexPath)
         cell.selectionStyle = .none
         cell.textLabel?.text = models[indexPath.row]
         
