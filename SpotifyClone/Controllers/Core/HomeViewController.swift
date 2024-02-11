@@ -82,6 +82,7 @@ class HomeViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = .systemBackground
+        collectionView.showsVerticalScrollIndicator = false
         
         view.addSubview(collectionView)
         view.addSubview(spinner)
@@ -134,9 +135,9 @@ class HomeViewController: UIViewController {
             itemCount = 3
             orthogonalScrollingBehavior = .groupPaging
         case 1:
-            itemHeightFraction = 0.5
-            itemWidth = .absolute(200)
-            itemCount = 2
+            itemHeightFraction = 1
+            itemWidth = .fractionalWidth(0.7)
+            itemCount = 1
             orthogonalScrollingBehavior = .continuous
         case 2:
             itemHeightFraction = 1.0 / 4.0
@@ -156,15 +157,18 @@ class HomeViewController: UIViewController {
                 heightDimension: .fractionalHeight(itemHeightFraction)
             )
         )
-        item.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 2, bottom: 0, trailing: 2)
+        
+        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 2, bottom: 12, trailing: 2)
         
         let group = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: itemWidth,
-                heightDimension: .absolute(390)
+                heightDimension: .absolute(350)
             ),
             subitems: Array(repeating: item, count: itemCount)
         )
+        
+        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 0)
         
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = orthogonalScrollingBehavior

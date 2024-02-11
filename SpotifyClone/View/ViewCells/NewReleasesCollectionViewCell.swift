@@ -26,15 +26,7 @@ class NewReleasesCollectionViewCell: UICollectionViewCell {
     
     private let albumNameLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 20, weight: .semibold)
-        label.numberOfLines = 0
-        
-        return label
-    }()
-    
-    private let numberOfTracksLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 18, weight: .thin)
+        label.font = .systemFont(ofSize: 18, weight: .semibold)
         label.numberOfLines = 0
         
         return label
@@ -42,7 +34,15 @@ class NewReleasesCollectionViewCell: UICollectionViewCell {
     
     private let artistNameLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 18, weight: .light)
+        label.font = .systemFont(ofSize: 16, weight: .light)
+        label.numberOfLines = 0
+        
+        return label
+    }()
+    
+    private let numberOfTracksLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 16, weight: .thin)
         label.numberOfLines = 0
         
         return label
@@ -54,14 +54,14 @@ class NewReleasesCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         
         contentView.largeContentTitle = "New Releases"
-        
         contentView.backgroundColor = .secondarySystemBackground
         contentView.addSubview(albumCoverImageView)
         contentView.addSubview(albumNameLabel)
         contentView.addSubview(numberOfTracksLabel)
         contentView.addSubview(artistNameLabel)
-        
         contentView.clipsToBounds = true
+        contentView.layer.cornerRadius = 10
+        contentView.layer.masksToBounds = true
     }
     
     required init?(coder: NSCoder) {
@@ -72,40 +72,42 @@ class NewReleasesCollectionViewCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        let imageSize: CGFloat = contentView.height - 10
-        let albumLabelSize = albumNameLabel.sizeThatFits(
-            CGSize(width: contentView.width - imageSize - 10,
-                   height: contentView.height - 10
-                  )
-            )
-        
-        albumNameLabel.sizeToFit()
-        artistNameLabel.sizeToFit()
-        numberOfTracksLabel.sizeToFit()
-        
-        let albumLabelHeight = min(60, albumLabelSize.height)
-        
-        albumCoverImageView.frame = CGRect(x: 5, y: 5, width: imageSize, height: imageSize)
-        let infoOffset = albumCoverImageView.right + 10
-        
-        albumNameLabel.frame = CGRect(x: infoOffset,
-                                      y: 5,
-                                      width: albumLabelSize.width,
-                                      height: albumLabelHeight
-        )
-        
-        artistNameLabel.frame = CGRect(x: infoOffset,
-                                       y: albumNameLabel.bottom,
-                                       width: contentView.width - albumCoverImageView.right - 5,
-                                       height: 30
-        )
-        
-        numberOfTracksLabel.frame = CGRect(x: infoOffset,
-                                           y: contentView.bottom - 44,
-                                           width: contentView.width,
-                                           height: 44
-        )
+        let imageSize: CGFloat = contentView.height
 
+        // Image
+        albumCoverImageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            albumCoverImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            albumCoverImageView.leadingAnchor.constraint(lessThanOrEqualTo: contentView.leadingAnchor),
+            albumCoverImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).with(priority: .defaultHigh),
+            albumCoverImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            albumCoverImageView.widthAnchor.constraint(equalToConstant: imageSize),
+            albumCoverImageView.heightAnchor.constraint(equalToConstant: imageSize)
+        ])
+        
+        // Label
+        albumNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        albumNameLabel.numberOfLines = 2
+        NSLayoutConstraint.activate([
+            albumNameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
+            albumNameLabel.leadingAnchor.constraint(equalTo: albumCoverImageView.trailingAnchor, constant: 10),
+            albumNameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            albumNameLabel.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -5)
+        ])
+        
+        // Artist
+        artistNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            artistNameLabel.topAnchor.constraint(equalTo: albumNameLabel.bottomAnchor, constant: 5),
+            artistNameLabel.leadingAnchor.constraint(equalTo: albumCoverImageView.trailingAnchor, constant: 10)
+        ])
+        
+        // # of Tracks
+        numberOfTracksLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            numberOfTracksLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
+            numberOfTracksLabel.leadingAnchor.constraint(equalTo: albumCoverImageView.trailingAnchor, constant: 10)
+        ])
     }
     
     // Called to prepare when we reuse cell. Set to nil to prevent state issues with these components

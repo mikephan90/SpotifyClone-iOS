@@ -60,3 +60,10 @@ extension String {
 extension Notification.Name {
     static let albumSavedNotification = Notification.Name("albumSavedNotification")
 }
+
+extension NSLayoutConstraint {
+    func with(priority: UILayoutPriority) -> NSLayoutConstraint {
+        self.priority = priority
+        return self
+    }
+}

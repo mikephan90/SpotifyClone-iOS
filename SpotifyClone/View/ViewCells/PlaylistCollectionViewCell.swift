@@ -18,7 +18,7 @@ class PlaylistCollectionViewCell: UICollectionViewCell {
     private let playlistCoverImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.masksToBounds = true
-        imageView.layer.cornerRadius = 4
+        imageView.layer.cornerRadius = 10
         imageView.image = UIImage(systemName: "photo")
         imageView.contentMode = .scaleAspectFill
         
@@ -63,19 +63,29 @@ class PlaylistCollectionViewCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        creatorNameLabel.frame = CGRect(x: 3,
-                                        y: contentView.height - 30,
-                                        width: contentView.width - 6,
-                                        height: 30)
-        playlistNameLabel.frame = CGRect(x: 3,
-                                        y: contentView.height - 50,
-                                        width: contentView.width - 6,
-                                        height: 30)
-        let imageSize = contentView.height - 70
-        playlistCoverImageView.frame = CGRect(x: (contentView.width - imageSize) / 2,
-                                              y: 3,
-                                              width: imageSize,
-                                              height: imageSize)
+        let imageSize = contentView.width
+ 
+        // Image
+        playlistCoverImageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            playlistCoverImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            playlistCoverImageView.widthAnchor.constraint(equalToConstant: imageSize),
+            playlistCoverImageView.heightAnchor.constraint(equalToConstant: imageSize)
+        ])
+        
+        // Title
+        playlistNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            playlistNameLabel.topAnchor.constraint(equalTo: playlistCoverImageView.bottomAnchor, constant: 10),
+            playlistNameLabel.centerXAnchor.constraint(equalTo: playlistCoverImageView.centerXAnchor)
+        ])
+        
+        // Creator
+        creatorNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            creatorNameLabel.topAnchor.constraint(equalTo: playlistNameLabel.bottomAnchor),
+            creatorNameLabel.centerXAnchor.constraint(equalTo: playlistCoverImageView.centerXAnchor)
+        ])
     
     }
     
