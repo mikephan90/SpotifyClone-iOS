@@ -8,10 +8,12 @@
 import UIKit
 
 class LibraryViewController: UIViewController {
+    
     // MARK: - Properties
     
+    private let toggleView = LibraryToggleView()
+    private var viewModel = LibraryViewModel()
     private let playlistsVC = LibraryPlaylistsViewController()
-    
     private let albumVC = LibraryAlbumViewController()
     
     private let scrollView: UIScrollView = {
@@ -20,13 +22,24 @@ class LibraryViewController: UIViewController {
         return scrollView
     }()
     
-    private let toggleView = LibraryToggleView()
-    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
+        fetchData()
+    }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        scrollView.frame = CGRect(x: 0, y: view.safeAreaInsets.top + 55, width: view.width, height: view.height - view.safeAreaInsets.top - view.safeAreaInsets.bottom - 55)
+        
+        toggleView.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: 200, height: 50)
+    }
+    
+    // MARK: - Setup UI
+    
+    private func setupUI() {
         view.addSubview(scrollView)
         view.addSubview(toggleView)
         
@@ -39,12 +52,18 @@ class LibraryViewController: UIViewController {
         updateBarButtons()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        scrollView.frame = CGRect(x: 0, y: view.safeAreaInsets.top + 55, width: view.width, height: view.height - view.safeAreaInsets.top - view.safeAreaInsets.bottom - 55)
-        
-        toggleView.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: 200, height: 50)
-    }
+    // MARK: - Fetching Data
+    
+    private func fetchData() {
+          viewModel.fetchData { [weak self] success in
+              guard let self = self else { return }
+              DispatchQueue.main.async {
+                  if success {
+                      self.addChildren()
+                  }
+              }
+          }
+      }
     
     // MARK: - Functions
     

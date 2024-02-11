@@ -12,9 +12,9 @@ class LibraryAlbumViewController: UIViewController {
     // MARK: - Properties
     
     var albums = [Album]()
+    var viewModel = LibraryAlbumViewModel()
     
     // Return to the caller, a playlist
-    
     private let noAlbumsView = ActionLabelView()
     
     private let tableView: UITableView = {
@@ -30,7 +30,19 @@ class LibraryAlbumViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
         
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        noAlbumsView.frame = CGRect(x: 0, y: 0, width: 160, height: 150)
+        tableView.frame = CGRect(x: 0, y: 0, width: view.width, height: view.height)
+    }
+    
+    // MARK: - SetupUI
+    
+    private func setupUI() {
         view.backgroundColor = .systemBackground
         
         view.addSubview(tableView)
@@ -46,14 +58,6 @@ class LibraryAlbumViewController: UIViewController {
         })
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        noAlbumsView.frame = CGRect(x: 0, y: 0, width: 160, height: 150)
-        tableView.frame = CGRect(x: 0, y: 0, width: view.width, height: view.height)
-    }
-    
-    // MARK: - Functions
-    
     private func updateUI() {
         if albums.isEmpty {
             noAlbumsView.isHidden = false
@@ -65,17 +69,16 @@ class LibraryAlbumViewController: UIViewController {
         }
     }
     
+    // MARK: - Fetching Data
+    
     private func fetchData() {
         albums.removeAll()
-        APICaller.shared.getCurrentUserAlbums { result in
+        viewModel.fetchData { [weak self] success in
+            guard let self = self else { return }
             DispatchQueue.main.async {
-                switch result {
-                case .success(let albums):
-                    print(albums)
-                    self.albums = albums
+                if success {
+                    self.albums = self.viewModel.albums
                     self.updateUI()
-                case .failure(let error):
-                    print(error.localizedDescription)
                 }
             }
         }
@@ -85,7 +88,7 @@ class LibraryAlbumViewController: UIViewController {
         view.addSubview(noAlbumsView)
         noAlbumsView.configure(with: ActionLabelViewViewModel(text: "You don't have any saved albums yet", actionTitle: "Browse"))
     }
-
+    
     @objc func didTapClose() {
         dismiss(animated: true, completion: nil)
     }

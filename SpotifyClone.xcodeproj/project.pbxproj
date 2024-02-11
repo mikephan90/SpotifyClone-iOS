@@ -81,6 +81,9 @@
 		B186CD022B78394D002FCF6D /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B186CD012B78394D002FCF6D /* HomeViewModel.swift */; };
 		B186CD052B7840DF002FCF6D /* HomeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B186CD042B7840DF002FCF6D /* HomeTests.swift */; };
 		B186CD072B788060002FCF6D /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B186CD062B788060002FCF6D /* SearchViewModel.swift */; };
+		B186CD092B788554002FCF6D /* LibraryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B186CD082B788554002FCF6D /* LibraryViewModel.swift */; };
+		B186CD0B2B78863A002FCF6D /* LibraryPlaylistsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B186CD0A2B78863A002FCF6D /* LibraryPlaylistsViewModel.swift */; };
+		B186CD0D2B7886E9002FCF6D /* LibraryAlbumViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B186CD0C2B7886E9002FCF6D /* LibraryAlbumViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -159,6 +162,9 @@
 		B186CD012B78394D002FCF6D /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		B186CD042B7840DF002FCF6D /* HomeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTests.swift; sourceTree = "<group>"; };
 		B186CD062B788060002FCF6D /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
+		B186CD082B788554002FCF6D /* LibraryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewModel.swift; sourceTree = "<group>"; };
+		B186CD0A2B78863A002FCF6D /* LibraryPlaylistsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPlaylistsViewModel.swift; sourceTree = "<group>"; };
+		B186CD0C2B7886E9002FCF6D /* LibraryAlbumViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryAlbumViewModel.swift; sourceTree = "<group>"; };
 		CD0A4716A77DE157AD0B40DD /* Pods-SpotifyClone.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpotifyClone.debug.xcconfig"; path = "Target Support Files/Pods-SpotifyClone/Pods-SpotifyClone.debug.xcconfig"; sourceTree = "<group>"; };
 		D816359CAC2122838535E604 /* Pods_SpotifyClone.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SpotifyClone.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -283,6 +289,9 @@
 				B186CCFF2B7837BA002FCF6D /* AuthViewModel.swift */,
 				B186CD012B78394D002FCF6D /* HomeViewModel.swift */,
 				B186CD062B788060002FCF6D /* SearchViewModel.swift */,
+				B186CD082B788554002FCF6D /* LibraryViewModel.swift */,
+				B186CD0A2B78863A002FCF6D /* LibraryPlaylistsViewModel.swift */,
+				B186CD0C2B7886E9002FCF6D /* LibraryAlbumViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -561,12 +570,15 @@
 				B116AE092B7431E300932AE1 /* AlbumViewController.swift in Sources */,
 				B186CCE42B75D8CB002FCF6D /* SearchResultSubtitleTableViewCell.swift in Sources */,
 				B116ADF92B73FBFB00932AE1 /* NewReleasesCollectionViewCell.swift in Sources */,
+				B186CD092B788554002FCF6D /* LibraryViewModel.swift in Sources */,
 				B116AE152B744BDF00932AE1 /* TracksResponse.swift in Sources */,
 				B116ADC92B71E52000932AE1 /* AuthManger.swift in Sources */,
 				B186CCEB2B75E58A002FCF6D /* PlayerControlsView.swift in Sources */,
+				B186CD0D2B7886E9002FCF6D /* LibraryAlbumViewModel.swift in Sources */,
 				B116AE1B2B754FCD00932AE1 /* TitleHeaderCollectionReusableView.swift in Sources */,
 				B116AE132B744B4A00932AE1 /* PlaylistDetailsResponse.swift in Sources */,
 				B116ADDD2B72AB3E00932AE1 /* AuthResponse.swift in Sources */,
+				B186CD0B2B78863A002FCF6D /* LibraryPlaylistsViewModel.swift in Sources */,
 				B116ADF62B73E52800932AE1 /* RecommendationsResponse.swift in Sources */,
 				B116ADED2B72F14C00932AE1 /* NewReleasesResponse.swift in Sources */,
 				B116ADCD2B71E53800932AE1 /* HapticsManager.swift in Sources */,

@@ -12,12 +12,12 @@ class LibraryPlaylistsViewController: UIViewController {
     // MARK: - Properties
     
     var playlists = [Playlist]()
+    var viewModel = LibraryPlaylistsViewModel()
+    var selectionHandler: ((Playlist) -> Void)? // Return to the caller, a playlist
     
-    // Return to the caller, a playlist
-    public var selectionHandler: ((Playlist) -> Void)?
+    // MARK: - Views
     
     private let noPlaylistView = ActionLabelView()
-    
     private let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.register(SearchResultSubtitleTableViewCell.self, forCellReuseIdentifier: SearchResultSubtitleTableViewCell.identifier)
@@ -29,20 +29,8 @@ class LibraryPlaylistsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = .systemBackground
-        
-        view.addSubview(tableView)
-        
-        tableView.delegate = self
-        tableView.dataSource = self
-        
-        setUpNoPlaylistView()
+        setupUI()
         fetchData()
-        
-        if selectionHandler != nil {
-            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(didTapClose))
-        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -51,36 +39,53 @@ class LibraryPlaylistsViewController: UIViewController {
         tableView.frame = view.bounds
     }
     
-    // MARK: - Functions
+    // MARK: - SetupUI
     
-    private func updateUI() {
-        if playlists.isEmpty {
-            noPlaylistView.isHidden = false
-            tableView.isHidden = true
-        } else {
-            tableView.reloadData()
-            noPlaylistView.isHidden = true
-            tableView.isHidden = false
+    private func setupUI() {
+        view.backgroundColor = .systemBackground
+        view.addSubview(tableView)
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        setUpNoPlaylistView()
+        
+        if selectionHandler != nil {
+            navigationItem.leftBarButtonItem = UIBarButtonItem(
+                barButtonSystemItem: .close,
+                target: self,
+                action: #selector(didTapClose)
+            )
         }
     }
     
+    private func updateUI() {
+        noPlaylistView.isHidden = !viewModel.isPlaylistEmpty
+        tableView.isHidden = viewModel.isPlaylistEmpty
+        tableView.reloadData()
+    }
+    
+    // MARK: - Fetching Data
+    
     private func fetchData() {
-        APICaller.shared.getCurrentUserPlaylists { result in
+        viewModel.fetchData { [weak self] success in
+            guard let self = self else { return }
             DispatchQueue.main.async {
-                switch result {
-                case .success(let playlists):
-                    self.playlists = playlists
+                if success {
+                    self.playlists = self.viewModel.playlists
                     self.updateUI()
-                case .failure(let error):
-                    print(error.localizedDescription)
                 }
             }
         }
     }
     
+    // MARK: - Functions
+    
     func setUpNoPlaylistView() {
         view.addSubview(noPlaylistView)
-        noPlaylistView.configure(with: ActionLabelViewViewModel(text: "You don't have any playlist yet", actionTitle: "Create"))
+        noPlaylistView.configure(with: ActionLabelViewViewModel(
+            text: viewModel.noPlaylistsText,
+            actionTitle: "Create"))
     }
     
     func showCreatePlaylistAlert() {
