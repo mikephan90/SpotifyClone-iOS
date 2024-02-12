@@ -36,8 +36,13 @@ class LibraryAlbumViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        noAlbumsView.frame = CGRect(x: 0, y: 0, width: 160, height: 150)
-        tableView.frame = CGRect(x: 0, y: 0, width: view.width, height: view.height)
+        tableView.frame = view.bounds
+        
+        noAlbumsView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            noAlbumsView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            noAlbumsView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
     }
     
     // MARK: - SetupUI

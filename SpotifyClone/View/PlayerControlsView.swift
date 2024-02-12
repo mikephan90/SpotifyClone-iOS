@@ -129,22 +129,61 @@ final class PlayerControlsView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        nameLabel.frame = CGRect(x: 0, y: 0, width: width, height: 50)
-        subtitleLabel.frame = CGRect(x: 0, y: nameLabel.bottom, width: width, height: 50)
         
-        // replace this with track playback
-        volumeSlider.frame = CGRect(x: 10, y: subtitleLabel.bottom + 20, width: width - 20, height: 44)
-        
-        let buttonSize: CGFloat = 60
-        playPauseButton.frame = CGRect(
-            x: (width - buttonSize) / 2,
-            y: volumeSlider.bottom + 30,
-            width: buttonSize,
-            height: buttonSize
-        )
-        
-        backButton.frame = CGRect(x: playPauseButton.left - 50 - buttonSize, y: playPauseButton.top, width: buttonSize, height: buttonSize)
-        nextButton.frame = CGRect(x: playPauseButton.right + 50, y: playPauseButton.top, width: buttonSize, height: buttonSize)
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        volumeSlider.translatesAutoresizingMaskIntoConstraints = false
+        playPauseButton.translatesAutoresizingMaskIntoConstraints = false
+        backButton.translatesAutoresizingMaskIntoConstraints = false
+        nextButton.translatesAutoresizingMaskIntoConstraints = false
+
+        // Name Label Constraints
+        NSLayoutConstraint.activate([
+            nameLabel.topAnchor.constraint(equalTo: topAnchor),
+            nameLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+            nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
+            nameLabel.heightAnchor.constraint(equalToConstant: 50)
+        ])
+
+        // Subtitle Label Constraints
+        NSLayoutConstraint.activate([
+            subtitleLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor),
+            subtitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+            subtitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
+            subtitleLabel.heightAnchor.constraint(equalToConstant: 50)
+        ])
+
+        // Volume Slider Constraints
+        NSLayoutConstraint.activate([
+            volumeSlider.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 20),
+            volumeSlider.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            volumeSlider.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+            volumeSlider.heightAnchor.constraint(equalToConstant: 44)
+        ])
+
+        // Play/Pause Button Constraints
+        NSLayoutConstraint.activate([
+            playPauseButton.centerXAnchor.constraint(equalTo: centerXAnchor),
+            playPauseButton.topAnchor.constraint(equalTo: volumeSlider.bottomAnchor, constant: 30),
+            playPauseButton.widthAnchor.constraint(equalToConstant: 60),
+            playPauseButton.heightAnchor.constraint(equalToConstant: 60)
+        ])
+
+        // Back Button Constraints
+        NSLayoutConstraint.activate([
+            backButton.trailingAnchor.constraint(equalTo: playPauseButton.leadingAnchor, constant: -50),
+            backButton.centerYAnchor.constraint(equalTo: playPauseButton.centerYAnchor),
+            backButton.widthAnchor.constraint(equalToConstant: 60),
+            backButton.heightAnchor.constraint(equalToConstant: 60)
+        ])
+
+        // Next Button Constraints
+        NSLayoutConstraint.activate([
+            nextButton.leadingAnchor.constraint(equalTo: playPauseButton.trailingAnchor, constant: 50),
+            nextButton.centerYAnchor.constraint(equalTo: playPauseButton.centerYAnchor),
+            nextButton.widthAnchor.constraint(equalToConstant: 60),
+            nextButton.heightAnchor.constraint(equalToConstant: 60)
+        ])
     }
     
     // MARK: - Functions

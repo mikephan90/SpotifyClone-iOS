@@ -57,8 +57,24 @@ class ActionLabelView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        button.frame = CGRect(x: 0, y: height - 40, width: width, height: 40)
-        label.frame = CGRect(x: 0, y: 0, width: width, height: height - 45)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+
+        // Button Constraints
+        NSLayoutConstraint.activate([
+            button.leadingAnchor.constraint(equalTo: leadingAnchor),
+            button.trailingAnchor.constraint(equalTo: trailingAnchor),
+            button.bottomAnchor.constraint(equalTo: bottomAnchor),
+            button.heightAnchor.constraint(equalToConstant: 40)
+        ])
+
+        // Label Constraints
+        NSLayoutConstraint.activate([
+            label.leadingAnchor.constraint(equalTo: leadingAnchor),
+            label.trailingAnchor.constraint(equalTo: trailingAnchor),
+            label.topAnchor.constraint(equalTo: topAnchor),
+            label.bottomAnchor.constraint(equalTo: button.topAnchor, constant: -5)
+        ])
     }
     
     // MARK: - Methods

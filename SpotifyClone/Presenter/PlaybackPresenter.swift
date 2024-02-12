@@ -131,9 +131,7 @@ extension PlaybackPresenter: PlayerViewControllerDelegate {
         
         currentTrackIndex += 1
         
-        if currentTrackIndex >= 0 && currentTrackIndex < tracks.count {
-            print(player.items())
-            
+        if currentTrackIndex >= 0 && currentTrackIndex < tracks.count {            
             player.advanceToNextItem()
             playerVC?.refreshUI()
             

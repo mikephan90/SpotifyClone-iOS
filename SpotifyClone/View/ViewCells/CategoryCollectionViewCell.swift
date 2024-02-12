@@ -16,16 +16,6 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Views
     
-    private let imageView: UIImageView = {
-       let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        imageView.tintColor = .white
-        imageView.image = UIImage(systemName: "music.quarternote.3",
-                                  withConfiguration: UIImage.SymbolConfiguration(pointSize: 50, weight: .regular))
-        
-        return imageView
-    }()
-    
     private let labelText: UILabel = {
         let label = UILabel()
         label.textColor = .white
@@ -50,10 +40,10 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         contentView.layer.cornerRadius = 8
         contentView.layer.masksToBounds = true
         contentView.addSubview(labelText)
-        contentView.addSubview(imageView)
     }
     
     required init?(coder: NSCoder) {
@@ -63,21 +53,23 @@ class CategoryCollectionViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         labelText.text = nil
-        imageView.image = UIImage(systemName: "music.quarternote.3",
-                                  withConfiguration: UIImage.SymbolConfiguration(pointSize: 50, weight: .regular))
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
-        labelText.frame = CGRect(x: 10, y: contentView.height / 2, width: contentView.width - 20, height: contentView.height / 2)
-        imageView.frame = CGRect(x: contentView.width / 2, y: 10, width: contentView.width / 2, height: contentView.height / 2)
+   
+        labelText.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            labelText.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            labelText.topAnchor.constraint(equalTo: contentView.centerYAnchor),
+            labelText.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            labelText.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        ])
+
     }
     
     func configure(with viewModel: CategoryCollectionViewCellModel) {
         labelText.text = viewModel.title
-        imageView.sd_setImage(with: viewModel.artworkUrl, completed: nil)
         contentView.backgroundColor = colors.randomElement()
     }
-    
 }

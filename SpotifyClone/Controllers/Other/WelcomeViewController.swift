@@ -68,18 +68,51 @@ class WelcomeViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        // Add a sign in button
-        signInButton.frame = CGRect(
-            x: 20,
-            y: view.height - 50 - view.safeAreaInsets.bottom,
-            width: view.width - 40,
-            height: 50
-        )
-        overlayView.frame = view.bounds
-        bgImageView.frame = view.bounds
-        
-        logoImageView.frame = CGRect(x: (view.width-120)/2, y: (view.height-300)/2, width: 120, height: 120)
-        label.frame = CGRect(x: 30, y: logoImageView.bottom+30, width: view.width-60, height: 150)
+        signInButton.translatesAutoresizingMaskIntoConstraints = false
+        overlayView.translatesAutoresizingMaskIntoConstraints = false
+        bgImageView.translatesAutoresizingMaskIntoConstraints = false
+        logoImageView.translatesAutoresizingMaskIntoConstraints = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+
+        // Sign In Button Constraints
+        NSLayoutConstraint.activate([
+            signInButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            signInButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            signInButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50),
+            signInButton.heightAnchor.constraint(equalToConstant: 50)
+        ])
+
+        // Overlay View Constraints
+        NSLayoutConstraint.activate([
+            overlayView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            overlayView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            overlayView.topAnchor.constraint(equalTo: view.topAnchor),
+            overlayView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+
+        // Background Image View Constraints
+        NSLayoutConstraint.activate([
+            bgImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            bgImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            bgImageView.topAnchor.constraint(equalTo: view.topAnchor),
+            bgImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+
+        // Logo Image View Constraints
+        NSLayoutConstraint.activate([
+            logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            logoImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -90), // Adjust constant as needed
+            logoImageView.widthAnchor.constraint(equalToConstant: 120),
+            logoImageView.heightAnchor.constraint(equalToConstant: 120)
+        ])
+
+        // Label Constraints
+        NSLayoutConstraint.activate([
+            label.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 30),
+            label.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            label.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            label.heightAnchor.constraint(equalToConstant: 150)
+        ])
     }
     
     

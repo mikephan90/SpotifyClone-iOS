@@ -53,22 +53,33 @@ class SearchResultSubtitleTableViewCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        let imageSize: CGFloat = contentView.height - 10
+        let stackView = UIStackView()
+        
+        contentView.addSubview(stackView)
+        
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.spacing = 5
+        
+        stackView.addArrangedSubview(labelText)
+        stackView.addArrangedSubview(subtitleLabelText)
+        
+        let imageSize: CGFloat = contentView.height
         let labelHeight = contentView.height / 2
         
-        iconImageView.frame = CGRect(x: 10, y: 5, width: imageSize, height: imageSize)
-        labelText.frame = CGRect(
-            x: iconImageView.right + 10,
-            y: 0,
-            width: contentView.width - iconImageView.right - 15,
-            height: contentView.height
-        )
-        subtitleLabelText.frame = CGRect(
-            x: iconImageView.right + 10,
-            y: labelHeight,
-            width: contentView.width - iconImageView.right - 15,
-            height: labelHeight
-        )
+        iconImageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            iconImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            iconImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
+            iconImageView.widthAnchor.constraint(equalToConstant: imageSize),
+            iconImageView.heightAnchor.constraint(equalToConstant: imageSize)
+        ])
+
+        NSLayoutConstraint.activate([
+            stackView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            stackView.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: 10),
+            stackView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -10)
+        ])
     }
     
     override func prepareForReuse() {

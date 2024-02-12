@@ -77,8 +77,8 @@ class HomeViewController: UIViewController {
             PlaylistCollectionViewCell.self,
             forCellWithReuseIdentifier: PlaylistCollectionViewCell.identifier)
         collectionView.register(
-            RecommendedTrackCollectionViewCell.self,
-            forCellWithReuseIdentifier: RecommendedTrackCollectionViewCell.identifier)
+            TrackCollectionViewCell.self,
+            forCellWithReuseIdentifier: TrackCollectionViewCell.identifier)
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = .systemBackground
@@ -280,8 +280,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             
             return cell
         case .recommendedTracks(let viewModels):
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecommendedTrackCollectionViewCell.identifier, for: indexPath) as? RecommendedTrackCollectionViewCell else { return UICollectionViewCell() }
-            cell.backgroundColor = .blue
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrackCollectionViewCell.identifier, for: indexPath) as? TrackCollectionViewCell else { return UICollectionViewCell() }
             cell.configure(with: viewModels[indexPath.row])
             
             return cell

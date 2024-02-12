@@ -86,7 +86,6 @@ class PlaylistCollectionViewCell: UICollectionViewCell {
             creatorNameLabel.topAnchor.constraint(equalTo: playlistNameLabel.bottomAnchor),
             creatorNameLabel.centerXAnchor.constraint(equalTo: playlistCoverImageView.centerXAnchor)
         ])
-    
     }
     
     // Called to prepare when we reuse cell. Set to nil to prevent state issues with these components

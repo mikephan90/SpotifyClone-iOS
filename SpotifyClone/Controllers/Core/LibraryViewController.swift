@@ -32,9 +32,25 @@ class LibraryViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        scrollView.frame = CGRect(x: 0, y: view.safeAreaInsets.top + 55, width: view.width, height: view.height - view.safeAreaInsets.top - view.safeAreaInsets.bottom - 55)
         
-        toggleView.frame = CGRect(x: 0, y: view.safeAreaInsets.top, width: 200, height: 50)
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        toggleView.translatesAutoresizingMaskIntoConstraints = false
+
+        // ScrollView Constraints
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 55),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -view.safeAreaInsets.bottom)
+        ])
+
+        // Toggle View Constraints
+        NSLayoutConstraint.activate([
+            toggleView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            toggleView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            toggleView.widthAnchor.constraint(equalToConstant: 200),
+            toggleView.heightAnchor.constraint(equalToConstant: 50)
+        ])
     }
     
     // MARK: - Setup UI

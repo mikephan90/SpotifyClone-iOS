@@ -101,6 +101,10 @@ extension SearchResultsViewController: UITableViewDelegate, UITableViewDataSourc
         return sections[section].results.count
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let result = sections[indexPath.section].results[indexPath.row]
         

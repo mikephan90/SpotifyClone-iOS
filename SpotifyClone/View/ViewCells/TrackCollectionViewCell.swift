@@ -7,7 +7,7 @@
 
 import UIKit
 
-class RecommendedTrackCollectionViewCell: UICollectionViewCell {
+class TrackCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Propeties
     
@@ -45,12 +45,12 @@ class RecommendedTrackCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         
         contentView.largeContentTitle = "New Releases"
-        backgroundColor = .secondarySystemBackground
         contentView.backgroundColor = .secondarySystemBackground
         contentView.addSubview(albumCoverImageView)
         contentView.addSubview(trackNameLabel)
         contentView.addSubview(artistNameLabel)
-        
+        contentView.layer.cornerRadius = 10
+        contentView.layer.masksToBounds = true
         contentView.clipsToBounds = true
     }
     
@@ -62,21 +62,37 @@ class RecommendedTrackCollectionViewCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        albumCoverImageView.frame = CGRect(
-            x: 5,
-            y: 2,
-            width: contentView.height - 4,
-            height: contentView.height - 4)
-        trackNameLabel.frame = CGRect(
-            x: albumCoverImageView.right + 10,
-            y: 0,
-            width: contentView.width - albumCoverImageView.right - 15,
-            height: contentView.height / 2)
-        artistNameLabel.frame = CGRect(
-            x: albumCoverImageView.right + 10,
-            y: contentView.height / 2,
-            width: contentView.width - albumCoverImageView.right - 15,
-            height: contentView.height / 2)
+        let stackView = UIStackView()
+        
+        contentView.addSubview(stackView)
+        
+        stackView.addSubview(trackNameLabel)
+        stackView.addSubview(artistNameLabel)
+        
+        // Album Cover
+        albumCoverImageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            albumCoverImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            albumCoverImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            albumCoverImageView.heightAnchor.constraint(equalTo: contentView.heightAnchor),
+            albumCoverImageView.widthAnchor.constraint(equalTo: contentView.heightAnchor)
+        ])
+        
+        // StackView
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.spacing = 5
+        
+        stackView.addArrangedSubview(trackNameLabel)
+        stackView.addArrangedSubview(artistNameLabel)
+        
+        contentView.addSubview(stackView)
+        
+        NSLayoutConstraint.activate([
+            stackView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            stackView.leadingAnchor.constraint(equalTo: albumCoverImageView.trailingAnchor, constant: 10),
+            stackView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -10)
+        ])
     }
     
     // Called to prepare when we reuse cell. Set to nil to prevent state issues with these components

@@ -57,8 +57,8 @@ class PlaylistViewController: UIViewController {
         )
         
         collectionView.register(
-            RecommendedTrackCollectionViewCell.self,
-            forCellWithReuseIdentifier: RecommendedTrackCollectionViewCell.identifier
+            TrackCollectionViewCell.self,
+            forCellWithReuseIdentifier: TrackCollectionViewCell.identifier
         )
         
         collectionView.backgroundColor = .systemBackground
@@ -193,9 +193,9 @@ extension PlaylistViewController: UICollectionViewDelegate, UICollectionViewData
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: RecommendedTrackCollectionViewCell.identifier,
+            withReuseIdentifier: TrackCollectionViewCell.identifier,
             for: indexPath
-        ) as? RecommendedTrackCollectionViewCell else {
+        ) as? TrackCollectionViewCell else {
             return UICollectionViewCell()
         }
         cell.configure(with: viewModel.viewModels[indexPath.row])

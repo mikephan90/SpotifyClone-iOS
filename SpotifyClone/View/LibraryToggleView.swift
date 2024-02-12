@@ -70,13 +70,11 @@ class LibraryToggleView: UIView {
     
     // MARK: - Lifecycle
     
-#warning("Need to convert these to constraints! thru out project")
     override func layoutSubviews() {
         super.layoutSubviews()
         playlistButton.frame = CGRect(x: 0, y: 0, width: 100, height: 40)
         albumsButton.frame = CGRect(x: playlistButton.width, y: 0, width: 100, height: 40)
         layoutIndicator()
-        
     }
     
     // MARK: - Methods

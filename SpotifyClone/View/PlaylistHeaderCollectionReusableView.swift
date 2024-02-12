@@ -22,20 +22,20 @@ class PlaylistHeaderCollectionReusableView: UICollectionReusableView {
     
     private let nameLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 22, weight: .semibold)
+        label.font = .systemFont(ofSize: 20, weight: .semibold)
         return label
     }()
     
     private let descriptionLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 18, weight: .regular)
+        label.font = .systemFont(ofSize: 16, weight: .regular)
         label.numberOfLines = 0
         return label
     }()
     
     private let ownerLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 18, weight: .light)
+        label.font = .systemFont(ofSize: 16, weight: .light)
         return label
     }()
     
@@ -68,6 +68,8 @@ class PlaylistHeaderCollectionReusableView: UICollectionReusableView {
         addSubview(descriptionLabel)
         addSubview(ownerLabel)
         addSubview(playAllButton)
+        playlistImageView.layer.masksToBounds = true
+        playlistImageView.layer.cornerRadius = 10
         playAllButton.addTarget(self, action: #selector(didTapPlayAll), for: .touchUpInside)
     }
     
@@ -85,11 +87,48 @@ class PlaylistHeaderCollectionReusableView: UICollectionReusableView {
         super.layoutSubviews()
         let imageSize: CGFloat = 200
         
-        playlistImageView.frame = CGRect(x: (width - imageSize) / 2, y: 20, width: imageSize, height: imageSize)
-        nameLabel.frame = CGRect(x: 10, y: playlistImageView.bottom, width: width - 20, height: 44)
-        descriptionLabel.frame = CGRect(x: 10, y: nameLabel.bottom, width: width - 20, height: 44)
-        ownerLabel.frame = CGRect(x: 10, y: descriptionLabel.bottom, width: width - 20, height: 44)
-        playAllButton.frame = CGRect(x: width - 80, y: height - 80, width: 60, height: 60)
+        playlistImageView.translatesAutoresizingMaskIntoConstraints = false
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+        ownerLabel.translatesAutoresizingMaskIntoConstraints = false
+        playAllButton.translatesAutoresizingMaskIntoConstraints = false
+
+        // Playlist Image View Constraints
+        NSLayoutConstraint.activate([
+            playlistImageView.topAnchor.constraint(equalTo: topAnchor, constant: 20),
+            playlistImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            playlistImageView.widthAnchor.constraint(equalToConstant: imageSize),
+            playlistImageView.heightAnchor.constraint(equalToConstant: imageSize)
+        ])
+
+        // Name Label Constraints
+        NSLayoutConstraint.activate([
+            nameLabel.topAnchor.constraint(equalTo: playlistImageView.bottomAnchor, constant: 20),
+            nameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+        ])
+
+        // Description Label Constraints
+        NSLayoutConstraint.activate([
+            descriptionLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 10),
+            descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            descriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+        ])
+
+        // Owner Label Constraints
+        NSLayoutConstraint.activate([
+            ownerLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor),
+            ownerLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            ownerLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+        ])
+
+        // Play All Button Constraints
+        NSLayoutConstraint.activate([
+            playAllButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            playAllButton.topAnchor.constraint(equalTo: playlistImageView.bottomAnchor, constant: 20),
+            playAllButton.widthAnchor.constraint(equalToConstant: 60),
+            playAllButton.heightAnchor.constraint(equalToConstant: 60)
+        ])
     }
     
     func configure(with viewModel: PlaylistHeaderViewViewModel) {

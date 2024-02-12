@@ -35,8 +35,13 @@ class LibraryPlaylistsViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        noPlaylistView.frame = CGRect(x: 0, y: 0, width: 160, height: 150)
         tableView.frame = view.bounds
+        
+        noPlaylistView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            noPlaylistView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            noPlaylistView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
     }
     
     // MARK: - SetupUI
