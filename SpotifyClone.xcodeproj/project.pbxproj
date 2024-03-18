@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		135F880B7802B58C13DEC646 /* Pods_SpotifyClone.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D816359CAC2122838535E604 /* Pods_SpotifyClone.framework */; };
+		B10795362B8C449B00929FF7 /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10795352B8C449B00929FF7 /* SettingsModel.swift */; };
 		B10E031D2B7946FC00D04705 /* AlbumViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10E031C2B7946FC00D04705 /* AlbumViewModel.swift */; };
 		B116AD992B71E25400932AE1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B116AD982B71E25400932AE1 /* AppDelegate.swift */; };
 		B116AD9B2B71E25400932AE1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B116AD9A2B71E25400932AE1 /* SceneDelegate.swift */; };
@@ -105,6 +106,7 @@
 
 /* Begin PBXFileReference section */
 		64812B592FE32B0A11F08B21 /* Pods-SpotifyClone.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpotifyClone.release.xcconfig"; path = "Target Support Files/Pods-SpotifyClone/Pods-SpotifyClone.release.xcconfig"; sourceTree = "<group>"; };
+		B10795352B8C449B00929FF7 /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
 		B10E031C2B7946FC00D04705 /* AlbumViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumViewModel.swift; sourceTree = "<group>"; };
 		B116AD952B71E25400932AE1 /* SpotifyClone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpotifyClone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B116AD982B71E25400932AE1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -305,6 +307,7 @@
 				B116ADE52B72CB1F00932AE1 /* SettingsModels.swift */,
 				B116ADCE2B71E55000932AE1 /* Playlist.swift */,
 				B116ADD42B71E56E00932AE1 /* UserProfile.swift */,
+				B10795352B8C449B00929FF7 /* SettingsModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -625,6 +628,7 @@
 				B186CD022B78394D002FCF6D /* HomeViewModel.swift in Sources */,
 				B186CCF62B76B833002FCF6D /* LibraryPlaylistResponse.swift in Sources */,
 				B186CCDB2B75C9DD002FCF6D /* SearchResult.swift in Sources */,
+				B10795362B8C449B00929FF7 /* SettingsModel.swift in Sources */,
 				B116ADBD2B71E4B900932AE1 /* WelcomeViewController.swift in Sources */,
 				B116ADC12B71E4D300932AE1 /* ProfileViewController.swift in Sources */,
 				B186CCE02B75D625002FCF6D /* SearchResultDefaultTableViewModel.swift in Sources */,

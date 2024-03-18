@@ -65,7 +65,6 @@ class SearchResultSubtitleTableViewCell: UITableViewCell {
         stackView.addArrangedSubview(subtitleLabelText)
         
         let imageSize: CGFloat = contentView.height
-        let labelHeight = contentView.height / 2
         
         iconImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

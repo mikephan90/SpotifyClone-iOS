@@ -125,7 +125,7 @@ class PlaylistHeaderCollectionReusableView: UICollectionReusableView {
         // Play All Button Constraints
         NSLayoutConstraint.activate([
             playAllButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            playAllButton.topAnchor.constraint(equalTo: playlistImageView.bottomAnchor, constant: 20),
+            playAllButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20),
             playAllButton.widthAnchor.constraint(equalToConstant: 60),
             playAllButton.heightAnchor.constraint(equalToConstant: 60)
         ])

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SK
 
 class HomeViewController: UIViewController {
     
@@ -51,6 +52,7 @@ class HomeViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         collectionView.frame = view.bounds
+        
     }
     
     // MARK: - UI Setup
@@ -182,7 +184,7 @@ class HomeViewController: UIViewController {
     private func fetchData() {
         spinner.startAnimating()
         viewModel.fetchData { [weak self] result in
-            guard let self = self else { return }
+            guard let self else { return }
             DispatchQueue.main.async {
                 self.spinner.stopAnimating()
                 switch result {

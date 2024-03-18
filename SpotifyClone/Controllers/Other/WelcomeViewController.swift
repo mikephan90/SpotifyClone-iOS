@@ -67,7 +67,7 @@ class WelcomeViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
+        ∏
         signInButton.translatesAutoresizingMaskIntoConstraints = false
         overlayView.translatesAutoresizingMaskIntoConstraints = false
         bgImageView.translatesAutoresizingMaskIntoConstraints = false

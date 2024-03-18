@@ -1,12 +1,12 @@
 {
   "pins" : [
     {
-      "identity" : "ios-sdk",
+      "identity" : "sdwebimage",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/spotify/ios-sdk.git",
+      "location" : "https://github.com/SDWebImage/SDWebImage.git",
       "state" : {
-        "branch" : "master",
-        "revision" : "cdbdcb341ace5defa863cf323749376f7e4888e9"
+        "revision" : "b11493f76481dff17ac8f45274a6b698ba0d3af5",
+        "version" : "5.18.11"
       }
     }
   ],
